@@ -18,6 +18,5 @@ for i in range(t):
     y = input()
     cases.append((x, y))
 
-
 for i in range(t):
     print(solve(cases[i]), end='\n')
