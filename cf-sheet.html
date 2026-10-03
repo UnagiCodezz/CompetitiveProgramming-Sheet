@@ -2,775 +2,233 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A Sheet, Recovered — CF Practice Log</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,380;9..144,520&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Codeforces Problem Tracker</title>
+<meta name="color-scheme" content="light dark">
 <style>
-  :root{
-    --ink:#132019;
-    --paper:#edefe9;
-    --panel:#f7f8f3;
-    --line:#d7d9cc;
-    --muted:#5c6358;
-    --pine:#0f2018;
-    --pine-2:#1c3427;
-    --solved:#2f7d53;
-    --solved-soft:#e2efe6;
-    --pending:#a9853f;
-    --pending-soft:#f2ead6;
-    --brick:#a15139;
-    --brick-soft:#f3e4de;
-    --radius:10px;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
-    font-size:15px;
-    line-height:1.5;
-    -webkit-font-smoothing:antialiased;
-  }
-  a{color:inherit;}
-
-  .hero{
-    background:linear-gradient(160deg, var(--pine) 0%, var(--pine-2) 100%);
-    color:#eef3ee;
-    padding:52px 28px 34px;
-  }
-  .hero-inner{
-    max-width:960px;
-    margin:0 auto;
-  }
-  .hero h1{
-    font-family:'Fraunces', Georgia, serif;
-    font-weight:520;
-    font-optical-sizing:auto;
-    font-size:clamp(34px, 5vw, 52px);
-    line-height:1.05;
-    margin:0 0 10px;
-    letter-spacing:-0.01em;
-  }
-  .hero p.sub{
-    max-width:60ch;
-    color:#c7d3c8;
-    margin:0 0 30px;
-    font-size:14px;
-  }
-  .hero p.sub code{
-    color:#e9dfb8;
-  }
-
-  .stat-row{
-    display:flex;
-    align-items:flex-end;
-    gap:28px;
-    flex-wrap:wrap;
-    margin-bottom:14px;
-  }
-  .stat-big{
-    font-size:clamp(38px, 6vw, 56px);
-    font-weight:600;
-    letter-spacing:-0.02em;
-  }
-  .stat-big .slash{ color:#7f9482; font-weight:400; }
-  .stat-pct{
-    font-size:14px;
-    color:#c7d3c8;
-    padding-bottom:8px;
-  }
-  .progress-track{
-    height:8px;
-    border-radius:99px;
-    background:rgba(255,255,255,0.14);
-    overflow:hidden;
-  }
-  .progress-fill{
-    height:100%;
-    background:#6fbf93;
-    width:0%;
-    transition:width .35s ease;
-  }
-
-  .controls{
-    position:sticky;
-    top:0;
-    z-index:5;
-    background:var(--paper);
-    border-bottom:1px solid var(--line);
-    padding:14px 28px;
-  }
-  .controls-inner{
-    max-width:960px;
-    margin:0 auto;
-    display:flex;
-    flex-wrap:wrap;
-    gap:12px;
-    align-items:center;
-    justify-content:space-between;
-  }
-  .search-wrap{
-    flex:1 1 220px;
-    min-width:180px;
-  }
-  .search-wrap input{
-    width:100%;
-    padding:9px 12px;
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    background:var(--panel);
-    color:var(--ink);
-    font-family:inherit;
-    font-size:14px;
-  }
-  .search-wrap input:focus{
-    outline:2px solid var(--solved);
-    outline-offset:1px;
-  }
-  .chips{
-    display:flex;
-    gap:6px;
-  }
-  .chip{
-    padding:7px 13px;
-    border-radius:99px;
-    border:1px solid var(--line);
-    background:var(--panel);
-    color:var(--muted);
-    font-family:inherit;
-    font-size:13px;
-    cursor:pointer;
-  }
-  .chip[aria-pressed="true"]{
-    background:var(--pine);
-    color:#eef3ee;
-    border-color:var(--pine);
-  }
-  .actions{
-    display:flex;
-    gap:8px;
-  }
-  .btn{
-    padding:8px 13px;
-    border-radius:var(--radius);
-    border:1px solid var(--line);
-    background:var(--panel);
-    color:var(--ink);
-    font-family:inherit;
-    font-size:13px;
-    cursor:pointer;
-  }
-  .btn:hover{ border-color:var(--muted); }
-  .btn.danger{ color:var(--brick); }
-  .btn.danger:hover{ border-color:var(--brick); background:var(--brick-soft); }
-  input[type="file"]{ display:none; }
-
-  .catnav{
-    max-width:960px;
-    margin:12px auto 0;
-    padding:0 28px;
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
-  }
-  .catnav a{
-    font-size:11.5px;
-    padding:5px 10px;
-    border-radius:99px;
-    border:1px solid var(--line);
-    background:var(--panel);
-    color:var(--muted);
-    text-decoration:none;
-    white-space:nowrap;
-  }
-  .catnav a:hover{ border-color:var(--muted); color:var(--ink); }
-
-  main{
-    max-width:960px;
-    margin:0 auto;
-    padding:20px 28px 80px;
-  }
-
-  .count-line{
-    color:var(--muted);
-    font-size:13px;
-    margin:6px 2px 14px;
-  }
-
-  details.cat-block{
-    margin-bottom:14px;
-    border:1px solid var(--line);
-    border-radius:12px;
-    background:var(--panel);
-    overflow:hidden;
-  }
-  details.cat-block[open]{ background:transparent; }
-  details.cat-block.cat-hidden{ display:none; }
-  details.cat-block summary{
-    list-style:none;
-    cursor:pointer;
-    padding:14px 16px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    background:var(--panel);
-    border-radius:12px;
-  }
-  details.cat-block[open] summary{
-    border-bottom:1px solid var(--line);
-    border-radius:12px 12px 0 0;
-  }
-  details.cat-block summary::-webkit-details-marker{ display:none; }
-  .cat-title-wrap{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    min-width:0;
-  }
-  .cat-caret{
-    flex:0 0 auto;
-    width:9px;
-    height:9px;
-    border-right:1.5px solid var(--muted);
-    border-bottom:1.5px solid var(--muted);
-    transform:rotate(-45deg);
-    transition:transform .15s ease;
-  }
-  details.cat-block[open] .cat-caret{ transform:rotate(45deg); }
-  .cat-name{
-    font-family:'Fraunces', Georgia, serif;
-    font-weight:520;
-    font-size:17px;
-    color:var(--pine-2);
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
-  .cat-count{
-    flex:0 0 auto;
-    font-size:12.5px;
-    color:var(--muted);
-    background:var(--paper);
-    border:1px solid var(--line);
-    border-radius:99px;
-    padding:3px 10px;
-  }
-  .cat-count.cat-done{ color:var(--solved); border-color:#bcdcc7; }
-
-  table{
-    width:100%;
-    border-collapse:collapse;
-  }
-  thead th{
-    text-align:left;
-    font-weight:500;
-    color:var(--muted);
-    font-size:12px;
-    padding:8px 10px 8px;
-    border-bottom:1px solid var(--line);
-  }
-  th.col-idx, td.col-idx{ width:44px; color:var(--muted); }
-  th.col-code, td.col-code{ width:100px; }
-  th.col-done, td.col-done{ width:56px; text-align:center; }
-
-  tbody tr{
-    border-bottom:1px solid var(--line);
-    cursor:pointer;
-  }
-  tbody tr:last-child{ border-bottom:none; }
-  tbody tr:hover{ background:var(--paper); }
-  tbody tr.is-solved{ background:var(--solved-soft); }
-  tbody tr.is-solved:hover{ background:#d9ecdc; }
-  tbody tr.hidden{ display:none; }
-
-  td{ padding:11px 10px; vertical-align:middle; }
-  td.col-idx{ font-size:13px; }
-  .code-tag{
-    display:inline-block;
-    font-size:12.5px;
-    font-weight:600;
-    padding:3px 7px;
-    border-radius:6px;
-    border:1px solid var(--line);
-    background:var(--paper);
-    color:var(--pine-2);
-  }
-  tr.is-solved .code-tag{
-    border-color:#bcdcc7;
-    background:#ffffff;
-  }
-  .title-cell a{
-    text-decoration:none;
-    color:var(--ink);
-  }
-  .title-cell a:hover{ text-decoration:underline; }
-  tr.is-solved .title-cell a{ color:#2c4b39; }
-  .src-tag{
-    display:inline-block;
-    font-size:10px;
-    font-weight:600;
-    letter-spacing:.02em;
-    margin-left:7px;
-    padding:1px 5px;
-    border-radius:5px;
-    border:1px solid var(--line);
-    color:var(--muted);
-    vertical-align:1px;
-  }
-
-  .toggle{
-    width:22px;
-    height:22px;
-    border-radius:6px;
-    border:1.5px solid #9fa998;
-    background:#fff;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-  }
-  .toggle svg{ opacity:0; transform:scale(.6); transition:opacity .12s, transform .12s; }
-  tr.is-solved .toggle{
-    background:var(--solved);
-    border-color:var(--solved);
-  }
-  tr.is-solved .toggle svg{ opacity:1; transform:scale(1); }
-
-  .empty-state{
-    padding:40px 10px;
-    text-align:center;
-    color:var(--muted);
-  }
-
-  footer{
-    max-width:960px;
-    margin:0 auto;
-    padding:0 28px 50px;
-    color:var(--muted);
-    font-size:12.5px;
-  }
-  footer a{ color:var(--pine-2); }
-
-  .toast{
-    position:fixed;
-    bottom:22px;
-    left:50%;
-    transform:translateX(-50%) translateY(12px);
-    background:var(--pine);
-    color:#eef3ee;
-    padding:10px 16px;
-    border-radius:8px;
-    font-size:13px;
-    opacity:0;
-    pointer-events:none;
-    transition:opacity .2s, transform .2s;
-  }
-  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-
-  @media (max-width:520px){
-    .hero{ padding:36px 18px 26px; }
-    .controls{ padding:12px 18px; }
-    .catnav{ padding:0 18px; }
-    main{ padding:16px 18px 60px; }
-    footer{ padding:0 18px 40px; }
-    th.col-idx, td.col-idx{ display:none; }
-    .actions .btn-label{ display:none; }
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    *{ transition:none !important; }
-  }
+:root{--bg:#f5f4ee;--panel:#fffdf9;--sunk:#efede3;--line:#e3e0d3;--ink:#1f1e1b;--muted:#6f6c61;--accent:#d97757;--accent-d:#bf5b3b;--accent-s:#f8e3d9;--ok:#6b8a4e;--ok-s:#e6edd9;--star:#d9a43a;--r:14px;--sh:0 1px 2px rgba(60,40,20,.06),0 8px 24px -12px rgba(60,40,20,.14);--serif:"Tiempos Headline","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+:root[data-theme=dark]{--bg:#1c1b19;--panel:#262521;--sunk:#2e2d29;--line:#3a3833;--ink:#f1eee4;--muted:#a29f93;--accent:#e0866a;--accent-d:#ee9c82;--accent-s:#3d2a22;--ok:#9bb97c;--ok-s:#2c3324;--sh:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.5)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:calc(88px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);-webkit-font-smoothing:antialiased;padding:0 env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+header.hero{padding:calc(40px + env(safe-area-inset-top,0px)) 0 28px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:28px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600}
+.logo{width:30px;height:30px;border-radius:9px;background:var(--accent);display:grid;place-items:center;color:#fff}
+.hero-grid{display:grid;grid-template-columns:1fr auto;gap:36px;align-items:center}
+h1{font:500 clamp(36px,6vw,60px)/1.04 var(--serif);letter-spacing:-.02em;margin:0 0 10px}
+.lede{color:var(--muted);margin:0 0 22px;font-size:16px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;box-shadow:var(--sh)}
+.stat b{display:block;font:500 28px/1.1 var(--serif);font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:13px}
+.ring{position:relative;width:176px;height:176px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:11;stroke-linecap:round}
+.ring .tr{stroke:var(--sunk)}.ring .fg{stroke:var(--accent);stroke-dasharray:408.4;stroke-dashoffset:408.4;transition:stroke-dashoffset .7s cubic-bezier(.2,.8,.2,1)}
+.ring div{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.ring b{font:500 40px/1 var(--serif)}.ring small{color:var(--muted)}
+.bar-all{height:6px;background:var(--sunk);border-radius:9px;overflow:hidden;margin-top:18px}.bar-all i{display:block;height:100%;width:0;background:var(--accent);transition:width .6s}
+.ctl{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:10px 0;padding-top:calc(10px + env(safe-area-inset-top,0px))}
+.ctl .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.search{flex:1 1 240px;position:relative}
+.search input{width:100%;height:42px;padding:0 44px 0 40px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);font:inherit}
+.search input:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.search svg{position:absolute;left:13px;top:12px;color:var(--muted)}
+.search kbd{position:absolute;right:10px;top:9px;font:12px var(--sans);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 7px;background:var(--sunk)}
+.seg{display:flex;background:var(--sunk);padding:3px;border-radius:12px;gap:2px}
+.seg button{border:0;background:none;padding:7px 12px;border-radius:9px;color:var(--muted);font-size:14px;white-space:nowrap}
+.seg button[aria-pressed=true]{background:var(--panel);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12);font-weight:600}
+.btn{height:42px;padding:0 14px;border:1px solid var(--line);background:var(--panel);border-radius:12px;display:inline-flex;align-items:center;gap:7px;font-size:14px;transition:border-color .15s,background .15s}
+.btn:hover{border-color:var(--muted)}.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}.btn.pri:hover{background:var(--accent-d)}
+.btn.ic{width:42px;padding:0;justify-content:center}.btn.dng:hover{color:#b3402a;border-color:#b3402a}
+.menu{position:relative}.menu .pop{display:none;position:absolute;right:0;top:48px;min-width:190px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh);padding:6px;z-index:30}
+.menu.open .pop{display:block}.pop button{display:block;width:100%;text-align:left;border:0;background:none;padding:9px 12px;border-radius:8px;font-size:14px}.pop button:hover{background:var(--sunk)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:16px 0 4px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chips a{--p:0%;flex:none;text-decoration:none;color:var(--ink);font-size:13px;padding:6px 12px;border:1px solid var(--line);border-radius:99px;background:linear-gradient(90deg,var(--accent-s) var(--p),var(--panel) var(--p));white-space:nowrap}
+.chips a:hover{border-color:var(--accent)}.chips a.full{border-color:var(--ok);color:var(--ok)}
+.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin:14px 2px 12px}
+.cat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);margin-bottom:14px;box-shadow:var(--sh);content-visibility:auto;contain-intrinsic-size:auto 400px}
+.cat.gone{display:none}
+.cat summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;padding:16px 18px}
+.cat summary::-webkit-details-marker{display:none}
+.caret{width:8px;height:8px;border:solid var(--muted);border-width:0 2px 2px 0;transform:rotate(-45deg);transition:transform .2s;flex:none}
+.cat[open] .caret{transform:rotate(45deg)}
+.cn{font:500 20px/1.2 var(--serif);flex:1;min-width:0}
+.mini{width:110px;height:6px;border-radius:9px;background:var(--sunk);overflow:hidden;flex:none}.mini i{display:block;height:100%;width:0;background:var(--accent);transition:width .4s}
+.cc{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:48px;text-align:right}.cc.done{color:var(--ok);font-weight:600}
+.rows{list-style:none;margin:0;padding:0 8px 8px;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:34px 74px 1fr auto auto 34px;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;cursor:pointer;margin-top:4px;transition:background .15s}
+.row:hover{background:var(--sunk)}.row.s{background:var(--ok-s)}.row.hide{display:none}
+.row.flash{animation:fl 1.6s}@keyframes fl{0%,60%{background:var(--accent-s);box-shadow:0 0 0 2px var(--accent)}}
+.ix{color:var(--muted);font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
+.cd{font:600 12.5px ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--sunk);border-radius:7px;padding:3px 8px;text-align:center}
+.row.s .cd{background:var(--panel);color:var(--ok)}
+.tt{color:var(--ink);text-decoration:none;min-width:0;overflow-wrap:anywhere}.tt:hover{color:var(--accent-d);text-decoration:underline;text-underline-offset:3px}
+.row.s .tt{color:var(--muted)}
+.src{font-size:11px;font-weight:600;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:0 6px}
+.src:empty{display:none}
+.star{border:0;background:none;color:var(--line);font-size:18px;line-height:1;padding:4px;border-radius:8px}.star:hover{color:var(--star)}.star.on{color:var(--star)}
+.chk{width:26px;height:26px;border-radius:8px;border:1.8px solid var(--muted);background:var(--panel);display:grid;place-items:center;padding:0;transition:background .15s,border-color .15s,transform .15s}
+.chk svg{opacity:0;transform:scale(.4);transition:.18s}.row.s .chk{background:var(--ok);border-color:var(--ok);transform:scale(1.05)}.row.s .chk svg{opacity:1;transform:none}
+.empty{display:none;text-align:center;padding:60px 20px;color:var(--muted)}.empty h3{font:500 24px var(--serif);color:var(--ink);margin:0 0 6px}
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:90vw}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.foot{color:var(--muted);font-size:13px;text-align:center;padding:30px 0 50px}
+@media(max-width:760px){.hero-grid{grid-template-columns:1fr}.ring{order:-1;width:140px;height:140px}.ring b{font-size:32px}.stats{grid-template-columns:repeat(2,1fr)}.mini{display:none}.btn .lb{display:none}.btn{padding:0;width:42px;justify-content:center}.btn.pri{width:auto;padding:0 14px}.btn.pri .lb{display:inline}}
+@media(max-width:560px){.wrap{padding:0 14px}.row{grid-template-columns:62px 1fr auto 30px;gap:8px}.ix,.row .src{display:none}.seg button{padding:7px 9px}.cn{font-size:18px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
-
-<div class="hero">
-  <div class="hero-inner">
-    <h1>A sheet, recovered.</h1>
-    <p class="sub">298 practice problems, organized by topic — pulled back from an archived copy of an old CP sheet via the Wayback Machine, cross-checked against the original category list, and topped up with the 10 problems that were missing (a few live on SPOJ and CSES rather than Codeforces, since that's where those originals are). Check them off as you go — <code>it stays on this computer</code>.</p>
-    <div class="stat-row">
-      <div class="stat-big" id="statBig">0<span class="slash"> / 298</span></div>
-      <div class="stat-pct" id="statPct">0% done</div>
-    </div>
-    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+<header class="hero"><div class="wrap">
+  <div class="top">
+    <div class="brand"><span class="logo"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Problem Tracker</div>
+    <button class="btn ic" id="theme" aria-label="Toggle dark mode" title="Toggle theme"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></button>
   </div>
-</div>
-
-<div class="controls">
-  <div class="controls-inner">
-    <div class="search-wrap">
-      <input type="text" id="searchInput" placeholder="Search by name or code, e.g. 375D" autocomplete="off">
+  <div class="hero-grid">
+    <div>
+      <h1>Keep your Codeforces practice moving.</h1>
+      <p class="lede" id="lede"></p>
+      <div class="stats">
+        <div class="stat"><b id="sSolved">0</b><span>Solved</span></div>
+        <div class="stat"><b id="sLeft">0</b><span>Remaining</span></div>
+        <div class="stat"><b id="sToday">0</b><span>Solved today</span></div>
+        <div class="stat"><b id="sStreak">0</b><span>Day streak</span></div>
+      </div>
     </div>
-    <div class="chips" role="group" aria-label="Filter">
-      <button class="chip" data-filter="all" aria-pressed="true">All</button>
-      <button class="chip" data-filter="solved" aria-pressed="false">Solved</button>
-      <button class="chip" data-filter="unsolved" aria-pressed="false">Unsolved</button>
-    </div>
-    <div class="actions">
-      <button class="btn" id="expandAllBtn" title="Expand every category">Expand all</button>
-      <button class="btn" id="collapseAllBtn" title="Collapse every category">Collapse all</button>
-      <button class="btn" id="exportBtn" title="Save your progress as a file">Export</button>
-      <button class="btn" id="importBtn" title="Load progress from a file">Import</button>
-      <input type="file" id="importFile" accept="application/json">
-      <button class="btn danger" id="resetBtn" title="Clear all progress">Reset</button>
-    </div>
+    <div class="ring" role="img" aria-label="Overall progress"><svg viewBox="0 0 160 160"><circle class="tr" cx="80" cy="80" r="65"/><circle class="fg" id="fg" cx="80" cy="80" r="65"/></svg><div><b id="pct">0%</b><small>complete</small></div></div>
   </div>
-</div>
-<nav class="catnav" id="catNav"></nav>
+</div></header>
 
-<main>
-  <p class="count-line" id="countLine"></p>
-  <div id="categories"></div>
-  <p class="empty-state" id="emptyState" style="display:none;">Nothing matches that search.</p>
+<div class="ctl"><div class="wrap">
+  <label class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search by name, code or topic" autocomplete="off" aria-label="Search problems"><kbd>/</kbd></label>
+  <div class="seg" role="group" aria-label="Filter"><button data-f="all" aria-pressed="true">All</button><button data-f="todo" aria-pressed="false">To do</button><button data-f="done" aria-pressed="false">Solved</button><button data-f="star" aria-pressed="false">Starred</button></div>
+  <button class="btn pri" id="rnd" title="Open a random unsolved problem (R)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg><span class="lb">Pick for me</span></button>
+  <div class="menu" id="menu"><button class="btn ic" id="mbtn" aria-label="More actions" aria-haspopup="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button>
+    <div class="pop"><button id="exp">Expand all topics</button><button id="col">Collapse all topics</button><button id="out">Export progress</button><button id="inp">Import progress</button><button id="rst" style="color:#b3402a">Reset everything</button></div>
+    <input type="file" id="file" accept="application/json" hidden></div>
+</div></div>
+
+<main class="wrap">
+  <nav class="chips" id="chips" aria-label="Topics"></nav>
+  <div class="meta"><span id="count"></span><span>Click a row to mark it solved</span></div>
+  <div id="cats"></div>
+  <div class="empty" id="empty"><h3>No problems match</h3><p>Try a different search or switch the filter back to All.</p></div>
+  <div class="foot">Progress saves automatically in this browser.</div>
 </main>
+<div class="toast" id="toast" role="status"></div>
 
-<footer>
-  Recovered from an archived version of a Codeforces practice sheet (Wayback Machine), then reorganized into its original 19 topic categories and cross-checked line by line against that archive — 10 problems were missing from the previous version of this file and have been added back in (marked <span class="src-tag">SPOJ</span> or <span class="src-tag">CSES</span> where the problem lives on a judge other than Codeforces). Progress is stored only in this browser's local storage for this file — export it now and then if you want a backup, or if you plan to open this from a different browser or machine.
-</footer>
-
-<div class="toast" id="toast"></div>
-
-<script type="application/json" id="problem-data">[{"id": 1, "title": "Bit++", "url": "https://codeforces.com/problemset/problem/282/A", "code": "282A", "category": "Implementation / Constructive"}, {"id": 2, "title": "Chewbaсca and Number", "url": "https://codeforces.com/contest/514/problem/A", "code": "514A", "category": "Implementation / Constructive"}, {"id": 3, "title": "Beautiful Matrix", "url": "https://codeforces.com/problemset/problem/263/A", "code": "263A", "category": "Implementation / Constructive"}, {"id": 4, "title": "Soft Drinking", "url": "https://codeforces.com/problemset/problem/151/A", "code": "151A", "category": "Implementation / Constructive"}, {"id": 5, "title": "The New Year: Meeting Friends", "url": "https://codeforces.com/problemset/problem/723/A", "code": "723A", "category": "Implementation / Constructive"}, {"id": 6, "title": "Sum of Round Numbers", "url": "https://codeforces.com/problemset/problem/1352/A", "code": "1352A", "category": "Implementation / Constructive"}, {"id": 7, "title": "Fox And Snake", "url": "https://codeforces.com/problemset/problem/510/A", "code": "510A", "category": "Implementation / Constructive"}, {"id": 8, "title": "Anton and Polyhedrons", "url": "https://codeforces.com/problemset/problem/785/A", "code": "785A", "category": "Implementation / Constructive"}, {"id": 9, "title": "Arrival of the General", "url": "https://codeforces.com/problemset/problem/144/A", "code": "144A", "category": "Implementation / Constructive"}, {"id": 10, "title": "In Search of an Easy Problem", "url": "https://codeforces.com/problemset/problem/1030/A", "code": "1030A", "category": "Implementation / Constructive"}, {"id": 11, "title": "Presents", "url": "https://codeforces.com/problemset/problem/136/A", "code": "136A", "category": "Implementation / Constructive"}, {"id": 12, "title": "Nearly Lucky Number", "url": "https://codeforces.com/problemset/problem/110/A", "code": "110A", "category": "Implementation / Constructive"}, {"id": 13, "title": "Tram", "url": "https://codeforces.com/problemset/problem/116/A", "code": "116A", "category": "Implementation / Constructive"}, {"id": 14, "title": "Wrong Subtraction", "url": "https://codeforces.com/problemset/problem/977/A", "code": "977A", "category": "Implementation / Constructive"}, {"id": 15, "title": "Soldier and Bananas", "url": "https://codeforces.com/problemset/problem/546/A", "code": "546A", "category": "Implementation / Constructive"}, {"id": 16, "title": "Bear and Big Brother", "url": "https://codeforces.com/problemset/problem/791/A", "code": "791A", "category": "Implementation / Constructive"}, {"id": 17, "title": "Boy or Girl", "url": "https://codeforces.com/problemset/problem/236/A", "code": "236A", "category": "Implementation / Constructive"}, {"id": 18, "title": "Word Capitalization", "url": "https://codeforces.com/problemset/problem/281/A", "code": "281A", "category": "Implementation / Constructive"}, {"id": 19, "title": "Helpful Maths", "url": "https://codeforces.com/problemset/problem/339/A", "code": "339A", "category": "Implementation / Constructive"}, {"id": 20, "title": "C+=", "url": "https://codeforces.com/problemset/problem/1368/A", "code": "1368A", "category": "Implementation / Constructive"}, {"id": 21, "title": "Maximum Increase", "url": "https://codeforces.com/problemset/problem/702/A", "code": "702A", "category": "Implementation / Constructive"}, {"id": 22, "title": "Gennady and a Card Game", "url": "https://codeforces.com/problemset/problem/1097/A", "code": "1097A", "category": "Implementation / Constructive"}, {"id": 23, "title": "Vanya and Cubes", "url": "https://codeforces.com/problemset/problem/492/A", "code": "492A", "category": "Implementation / Constructive"}, {"id": 24, "title": "Boring Apartments", "url": "https://codeforces.com/problemset/problem/1433/A", "code": "1433A", "category": "Implementation / Constructive"}, {"id": 25, "title": "Erasing Zeroes", "url": "https://codeforces.com/problemset/problem/1303/A", "code": "1303A", "category": "Implementation / Constructive"}, {"id": 26, "title": "Repeating Cipher", "url": "https://codeforces.com/problemset/problem/1095/A", "code": "1095A", "category": "Implementation / Constructive"}, {"id": 27, "title": "Fix You", "url": "https://codeforces.com/problemset/problem/1391/B", "code": "1391B", "category": "Implementation / Constructive"}, {"id": 28, "title": "String Task", "url": "https://codeforces.com/problemset/problem/118/A", "code": "118A", "category": "Implementation / Constructive"}, {"id": 29, "title": "Assigning to Classes", "url": "https://codeforces.com/problemset/problem/1300/B", "code": "1300B", "category": "Implementation / Constructive"}, {"id": 30, "title": "Numbers on Whiteboard", "url": "https://codeforces.com/problemset/problem/1430/C", "code": "1430C", "category": "Implementation / Constructive"}, {"id": 31, "title": "Petr and Book", "url": "https://codeforces.com/contest/139/problem/A", "code": "139A", "category": "Implementation / Constructive"}, {"id": 32, "title": "k-String", "url": "https://codeforces.com/problemset/problem/219/A", "code": "219A", "category": "Implementation / Constructive"}, {"id": 33, "title": "Game 23", "url": "https://codeforces.com/problemset/problem/1141/A", "code": "1141A", "category": "Implementation / Constructive"}, {"id": 34, "title": "Present from Lena", "url": "https://codeforces.com/problemset/problem/118/B", "code": "118B", "category": "Implementation / Constructive"}, {"id": 35, "title": "Donut Shops", "url": "https://codeforces.com/problemset/problem/1373/A", "code": "1373A", "category": "Implementation / Constructive"}, {"id": 36, "title": "Buttons", "url": "https://codeforces.com/problemset/problem/268/B", "code": "268B", "category": "Implementation / Constructive"}, {"id": 37, "title": "Dreamoon and Stairs", "url": "https://codeforces.com/problemset/problem/476/A", "code": "476A", "category": "Implementation / Constructive"}, {"id": 38, "title": "New Year Transportation", "url": "https://codeforces.com/problemset/problem/500/A", "code": "500A", "category": "Implementation / Constructive"}, {"id": 39, "title": "cAPS lOCK", "url": "https://codeforces.com/problemset/problem/131/A", "code": "131A", "category": "Implementation / Constructive"}, {"id": 40, "title": "Chocolates", "url": "https://codeforces.com/problemset/problem/1139/B", "code": "1139B", "category": "Implementation / Constructive"}, {"id": 41, "title": "City Day", "url": "https://codeforces.com/problemset/problem/1199/A", "code": "1199A", "category": "Implementation / Constructive"}, {"id": 42, "title": "Diverse Substring", "url": "https://codeforces.com/problemset/problem/1073/A", "code": "1073A", "category": "Implementation / Constructive"}, {"id": 43, "title": "Lucky Sum of Digits", "url": "https://codeforces.com/problemset/problem/109/A", "code": "109A", "category": "Implementation / Constructive"}, {"id": 44, "title": "Rooms and Staircases", "url": "https://codeforces.com/problemset/problem/1244/B", "code": "1244B", "category": "Implementation / Constructive"}, {"id": 45, "title": "Palindromic Twist", "url": "https://codeforces.com/problemset/problem/1027/A", "code": "1027A", "category": "Implementation / Constructive"}, {"id": 46, "title": "Shuffle Hashing", "url": "https://codeforces.com/problemset/problem/1278/A", "code": "1278A", "category": "Implementation / Constructive"}, {"id": 47, "title": "Middle of the Contest", "url": "https://codeforces.com/problemset/problem/1133/A", "code": "1133A", "category": "Implementation / Constructive"}, {"id": 48, "title": "OR in Matrix", "url": "https://codeforces.com/problemset/problem/486/B", "code": "486B", "category": "Implementation / Constructive"}, {"id": 49, "title": "Balanced Rating Changes", "url": "https://codeforces.com/problemset/problem/1237/A", "code": "1237A", "category": "Implementation / Constructive"}, {"id": 50, "title": "Amr and Music", "url": "https://codeforces.com/problemset/problem/507/A", "code": "507A", "category": "Implementation / Constructive"}, {"id": 51, "title": "Ichihime and Triangle", "url": "https://codeforces.com/problemset/problem/1337/A", "code": "1337A", "category": "Maths"}, {"id": 52, "title": "LCM Problem", "url": "https://codeforces.com/problemset/problem/1389/A", "code": "1389A", "category": "Maths"}, {"id": 53, "title": "Mahmoud and Ehab and the even-odd game", "url": "https://codeforces.com/problemset/problem/959/A", "code": "959A", "category": "Maths"}, {"id": 54, "title": "Array with Odd Sum", "url": "https://codeforces.com/problemset/problem/1296/A", "code": "1296A", "category": "Maths"}, {"id": 55, "title": "Floor Number", "url": "https://codeforces.com/problemset/problem/1426/A", "code": "1426A", "category": "Maths"}, {"id": 56, "title": "Three Pairwise Maximums", "url": "https://codeforces.com/problemset/problem/1385/A", "code": "1385A", "category": "Maths"}, {"id": 57, "title": "Park Lighting", "url": "https://codeforces.com/problemset/problem/1358/A", "code": "1358A", "category": "Maths"}, {"id": 58, "title": "Collecting Coins", "url": "https://codeforces.com/problemset/problem/1294/A", "code": "1294A", "category": "Maths"}, {"id": 59, "title": "Required Remainder", "url": "https://codeforces.com/problemset/problem/1374/A", "code": "1374A", "category": "Maths"}, {"id": 60, "title": "Magical Sticks", "url": "https://codeforces.com/problemset/problem/1371/A", "code": "1371A", "category": "Maths"}, {"id": 61, "title": "Minimal Square", "url": "https://codeforces.com/problemset/problem/1360/A", "code": "1360A", "category": "Maths"}, {"id": 62, "title": "Even Array", "url": "https://codeforces.com/problemset/problem/1367/B", "code": "1367B", "category": "Maths"}, {"id": 63, "title": "Most Unstable Array", "url": "https://codeforces.com/problemset/problem/1353/A", "code": "1353A", "category": "Maths"}, {"id": 64, "title": "Balanced Array", "url": "https://codeforces.com/problemset/problem/1343/B", "code": "1343B", "category": "Maths"}, {"id": 65, "title": "Buy a Shovel", "url": "https://codeforces.com/problemset/problem/732/A", "code": "732A", "category": "Maths"}, {"id": 66, "title": "Restoring Three Numbers", "url": "https://codeforces.com/problemset/problem/1154/A", "code": "1154A", "category": "Maths"}, {"id": 67, "title": "Yet Another Two Integers Problem", "url": "https://codeforces.com/problemset/problem/1409/A", "code": "1409A", "category": "Maths"}, {"id": 68, "title": "Candies and Two Sisters", "url": "https://codeforces.com/problemset/problem/1335/A", "code": "1335A", "category": "Maths"}, {"id": 69, "title": "Divisibility Problem", "url": "https://codeforces.com/problemset/problem/1328/A", "code": "1328A", "category": "Maths"}, {"id": 70, "title": "Elephant", "url": "https://codeforces.com/problemset/problem/617/A", "code": "617A", "category": "Maths"}, {"id": 71, "title": "Domino piling", "url": "https://codeforces.com/problemset/problem/50/A", "code": "50A", "category": "Maths"}, {"id": 72, "title": "Emotes", "url": "https://codeforces.com/problemset/problem/1117/B", "code": "1117B", "category": "Maths"}, {"id": 73, "title": "Drinks Choosing", "url": "https://codeforces.com/problemset/problem/1195/A", "code": "1195A", "category": "Maths"}, {"id": 74, "title": "Chunga-Changa", "url": "https://codeforces.com/problemset/problem/1181/A", "code": "1181A", "category": "Maths"}, {"id": 75, "title": "Dice Tower", "url": "https://codeforces.com/problemset/problem/1266/B", "code": "1266B", "category": "Maths"}, {"id": 76, "title": "Digital root", "url": "https://codeforces.com/problemset/problem/1107/B", "code": "1107B", "category": "Maths"}, {"id": 77, "title": "Heating", "url": "https://codeforces.com/problemset/problem/1260/A", "code": "1260A", "category": "Maths"}, {"id": 78, "title": "Competitive Programmer", "url": "https://codeforces.com/problemset/problem/1266/A", "code": "1266A", "category": "Maths"}, {"id": 79, "title": "Triangles on a Rectangle", "url": "https://codeforces.com/problemset/problem/1620/B", "code": "1620B", "category": "Maths"}, {"id": 80, "title": "Pasha and Stick", "url": "https://codeforces.com/problemset/problem/610/A", "code": "610A", "category": "Maths"}, {"id": 81, "title": "Young Physicist", "url": "https://codeforces.com/problemset/problem/69/A", "code": "69A", "category": "Maths"}, {"id": 82, "title": "Theatre-Square", "url": "https://codeforces.com/problemset/problem/1/A", "code": "1A", "category": "Maths"}, {"id": 83, "title": "Water Lily", "url": "https://codeforces.com/problemset/problem/1199/B", "code": "1199B", "category": "Maths"}, {"id": 84, "title": "Magic Stick", "url": "https://codeforces.com/problemset/problem/1257/B", "code": "1257B", "category": "Maths"}, {"id": 85, "title": "BowWow and the Timetable", "url": "https://codeforces.com/problemset/problem/1204/A", "code": "1204A", "category": "Maths"}, {"id": 86, "title": "Drazil and Date", "url": "https://codeforces.com/problemset/problem/515/A", "code": "515A", "category": "Maths"}, {"id": 87, "title": "Boboniu Likes to Color Balls", "url": "https://codeforces.com/problemset/problem/1395/A", "code": "1395A", "category": "Maths"}, {"id": 88, "title": "Lovely Palindromes", "url": "https://codeforces.com/problemset/problem/688/B", "code": "688B", "category": "Maths"}, {"id": 89, "title": "String LCM", "url": "https://codeforces.com/problemset/problem/1473/B", "code": "1473B", "category": "Maths"}, {"id": 90, "title": "K-divisible Sum", "url": "https://codeforces.com/problemset/problem/1476/A", "code": "1476A", "category": "Maths"}, {"id": 91, "title": "Berland Poker", "url": "https://codeforces.com/problemset/problem/1359/A", "code": "1359A", "category": "Maths"}, {"id": 92, "title": "Road To Zero", "url": "https://codeforces.com/problemset/problem/1342/A", "code": "1342A", "category": "Maths"}, {"id": 93, "title": "Dungeon", "url": "https://codeforces.com/problemset/problem/1463/A", "code": "1463A", "category": "Maths"}, {"id": 94, "title": "Caisa and Pylons", "url": "https://codeforces.com/problemset/problem/463/B", "code": "463B", "category": "Maths"}, {"id": 95, "title": "GCD Length", "url": "https://codeforces.com/problemset/problem/1511/B", "code": "1511B", "category": "Maths"}, {"id": 96, "title": "Lucky Numbers", "url": "https://codeforces.com/problemset/problem/630/C", "code": "630C", "category": "Maths"}, {"id": 97, "title": "Number Circle", "url": "https://codeforces.com/problemset/problem/1189/B", "code": "1189B", "category": "Maths"}, {"id": 98, "title": "Non-Coprime Partition", "url": "https://codeforces.com/problemset/problem/1038/B", "code": "1038B", "category": "Maths"}, {"id": 99, "title": "Hexagons!", "url": "https://codeforces.com/problemset/problem/630/D", "code": "630D", "category": "Maths"}, {"id": 100, "title": "Sequence with Digits", "url": "https://codeforces.com/problemset/problem/1355/A", "code": "1355A", "category": "Maths"}, {"id": 101, "title": "Hamburgers", "url": "https://codeforces.com/contest/371/problem/C", "code": "371C", "category": "Binary Search"}, {"id": 102, "title": "Magic Powder - 1", "url": "https://codeforces.com/contest/670/problem/D1", "code": "670D1", "category": "Binary Search"}, {"id": 103, "title": "Pipeline", "url": "https://codeforces.com/contest/287/problem/B", "code": "287B", "category": "Binary Search"}, {"id": 104, "title": "Poisoned Dagger", "url": "https://codeforces.com/problemset/problem/1613/C", "code": "1613C", "category": "Binary Search"}, {"id": 105, "title": "Mike and Chocolate Thieves", "url": "https://codeforces.com/contest/689/problem/C", "code": "689C", "category": "Binary Search"}, {"id": 106, "title": "Increasing by Modulo", "url": "https://codeforces.com/contest/1169/problem/C", "code": "1169C", "category": "Binary Search"}, {"id": 107, "title": "Vasya and Robot", "url": "https://codeforces.com/contest/1073/problem/C", "code": "1073C", "category": "Binary Search"}, {"id": 108, "title": "Multiplication Table", "url": "https://codeforces.com/contest/448/problem/D", "code": "448D", "category": "Binary Search"}, {"id": 109, "title": "Stressful Training", "url": "https://codeforces.com/contest/1132/problem/D", "code": "1132D", "category": "Binary Search"}, {"id": 110, "title": "Water Taps", "url": "https://codeforces.com/contest/954/problem/E", "code": "954E", "category": "Binary Search"}, {"id": 111, "title": "Minimax Problem", "url": "https://codeforces.com/contest/1288/problem/D", "code": "1288D", "category": "Binary Search"}, {"id": 112, "title": "Odd-Even Subsequence", "url": "https://codeforces.com/contest/1370/problem/D", "code": "1370D", "category": "Binary Search"}, {"id": 289, "title": "Prime Generator", "url": "https://www.spoj.com/problems/PRIME1/", "code": "PRIME1", "category": "Prime, Sieve, Prime Factorisation"}, {"id": 290, "title": "Printing some primes", "url": "https://www.spoj.com/problems/TDPRIMES/", "code": "TDPRIMES", "category": "Prime, Sieve, Prime Factorisation"}, {"id": 291, "title": "Finding the Kth Prime", "url": "https://www.spoj.com/problems/TDKPRIME/", "code": "TDKPRIME", "category": "Prime, Sieve, Prime Factorisation"}, {"id": 113, "title": "Good Sequences", "url": "https://codeforces.com/contest/264/problem/B", "code": "264B", "category": "Prime, Sieve, Prime Factorisation"}, {"id": 114, "title": "Taxes", "url": "https://codeforces.com/contest/735/problem/D", "code": "735D", "category": "Prime, Sieve, Prime Factorisation"}, {"id": 115, "title": "Soldier and Number Game", "url": "https://codeforces.com/contest/546/problem/D", "code": "546D", "category": "Prime, Sieve, Prime Factorisation"}, {"id": 116, "title": "Reducing Fractions", "url": "https://codeforces.com/contest/222/problem/C", "code": "222C", "category": "Prime, Sieve, Prime Factorisation"}, {"id": 117, "title": "Petya and Divisors", "url": "https://codeforces.com/problemset/problem/111/B", "code": "111B", "category": "Prime, Sieve, Prime Factorisation"}, {"id": 118, "title": "Primes and Multiplication", "url": "https://codeforces.com/contest/1228/problem/C", "code": "1228C", "category": "Prime, Sieve, Prime Factorisation"}, {"id": 119, "title": "GCD Counting", "url": "https://codeforces.com/contest/1101/problem/D", "code": "1101D", "category": "Prime, Sieve, Prime Factorisation"}, {"id": 120, "title": "New Year's Eve", "url": "https://codeforces.com/problemset/problem/912/B", "code": "912B", "category": "Bit Manipulation/Power Set"}, {"id": 121, "title": "Special Numbers", "url": "https://codeforces.com/problemset/problem/1594/B", "code": "1594B", "category": "Bit Manipulation/Power Set"}, {"id": 122, "title": "Petr and a Combination Lock", "url": "https://codeforces.com/problemset/problem/1097/B", "code": "1097B", "category": "Bit Manipulation/Power Set"}, {"id": 123, "title": "Array Elimination", "url": "https://codeforces.com/contest/1602/problem/C", "code": "1602C", "category": "Bit Manipulation/Power Set"}, {"id": 124, "title": "Powers Of Two", "url": "https://codeforces.com/problemset/problem/1095/C", "code": "1095C", "category": "Bit Manipulation/Power Set"}, {"id": 125, "title": "Berland Crossword", "url": "https://codeforces.com/problemset/problem/1494/B", "code": "1494B", "category": "Bit Manipulation/Power Set"}, {"id": 126, "title": "Dima and a Bad XOR", "url": "https://codeforces.com/problemset/problem/1151/B", "code": "1151B", "category": "Bit Manipulation/Power Set"}, {"id": 127, "title": "p-binary", "url": "https://codeforces.com/problemset/problem/1225/C", "code": "1225C", "category": "Bit Manipulation/Power Set"}, {"id": 128, "title": "Ehab and the Expected XOR Problem", "url": "https://codeforces.com/contest/1174/problem/D", "code": "1174D", "category": "Bit Manipulation/Power Set"}, {"id": 129, "title": "505", "url": "https://codeforces.com/problemset/problem/1391/D", "code": "1391D", "category": "Bit Manipulation/Power Set"}, {"id": 130, "title": "Zookeeper and The Infinite Zoo", "url": "https://codeforces.com/problemset/problem/1491/D", "code": "1491D", "category": "Bit Manipulation/Power Set"}, {"id": 131, "title": "Alternating Current", "url": "https://codeforces.com/contest/343/problem/B", "code": "343B", "category": "Stack/Queues/PriorityQueues"}, {"id": 132, "title": "Cd and pwd commands", "url": "https://codeforces.com/contest/158/problem/C", "code": "158C", "category": "Stack/Queues/PriorityQueues"}, {"id": 133, "title": "Longest Regular Bracket Sequence", "url": "https://codeforces.com/contest/5/problem/C", "code": "5C", "category": "Stack/Queues/PriorityQueues"}, {"id": 134, "title": "Pair of Numbers", "url": "https://codeforces.com/contest/359/problem/D", "code": "359D", "category": "Stack/Queues/PriorityQueues"}, {"id": 135, "title": "Great Vova Wall (Version 1)", "url": "https://codeforces.com/contest/1092/problem/D1", "code": "1092D1", "category": "Stack/Queues/PriorityQueues"}, {"id": 136, "title": "Skyscrapers (hard version)", "url": "https://codeforces.com/contest/1313/problem/C2", "code": "1313C2", "category": "Stack/Queues/PriorityQueues"}, {"id": 137, "title": "Phoenix and Towers", "url": "https://codeforces.com/contest/1515/problem/C", "code": "1515C", "category": "Stack/Queues/PriorityQueues"}, {"id": 138, "title": "Psychos in a Line", "url": "https://codeforces.com/contest/319/problem/B", "code": "319B", "category": "Stack/Queues/PriorityQueues"}, {"id": 139, "title": "Strip", "url": "https://codeforces.com/contest/487/problem/B", "code": "487B", "category": "Stack/Queues/PriorityQueues"}, {"id": 140, "title": "Great Vova Wall (Version 2)", "url": "https://codeforces.com/contest/1092/problem/D2", "code": "1092D2", "category": "Stack/Queues/PriorityQueues"}, {"id": 141, "title": "Special Segments of Permutation", "url": "https://codeforces.com/contest/1156/problem/E", "code": "1156E", "category": "Stack/Queues/PriorityQueues"}, {"id": 142, "title": "Stack Sorting", "url": "https://codeforces.com/contest/911/problem/E", "code": "911E", "category": "Stack/Queues/PriorityQueues"}, {"id": 143, "title": "Breaking Good", "url": "https://codeforces.com/contest/507/problem/E?locale=en", "code": "507E", "category": "Stack/Queues/PriorityQueues"}, {"id": 144, "title": "Good Substrings", "url": "https://codeforces.com/problemset/problem/271/D", "code": "271D", "category": "String Algorithms"}, {"id": 145, "title": "Prefix-Suffix Palindrome (Hard version)", "url": "https://codeforces.com/contest/1326/problem/D2", "code": "1326D2", "category": "String Algorithms"}, {"id": 146, "title": "Watto and Mechanism", "url": "https://codeforces.com/contest/514/problem/C", "code": "514C", "category": "String Algorithms"}, {"id": 147, "title": "Palindrome Degree", "url": "https://codeforces.com/contest/7/problem/D", "code": "7D", "category": "String Algorithms"}, {"id": 148, "title": "Spy Syndrome 2", "url": "https://codeforces.com/contest/633/problem/C", "code": "633C", "category": "String Algorithms"}, {"id": 149, "title": "Segment Occurrences", "url": "https://codeforces.com/contest/1016/problem/B", "code": "1016B", "category": "String Algorithms"}, {"id": 150, "title": "Password", "url": "https://codeforces.com/problemset/problem/126/B", "code": "126B", "category": "String Algorithms"}, {"id": 151, "title": "MUH and Cube Walls", "url": "https://codeforces.com/contest/471/problem/D", "code": "471D", "category": "String Algorithms"}, {"id": 152, "title": "Camp Schedule", "url": "https://codeforces.com/contest/1138/problem/D", "code": "1138D", "category": "String Algorithms"}, {"id": 153, "title": "Prefixes and Suffixes", "url": "https://codeforces.com/contest/432/problem/D", "code": "432D", "category": "String Algorithms"}, {"id": 154, "title": "Erase and Extend (Hard Version)", "url": "https://codeforces.com/contest/1537/problem/E2", "code": "1537E2", "category": "String Algorithms"}, {"id": 292, "title": "Number of Palindromes", "url": "https://www.spoj.com/problems/NUMOFPAL/", "code": "NUMOFPAL", "category": "String Algorithms"}, {"id": 293, "title": "Longest Palindromic Substring", "url": "https://www.spoj.com/problems/LPS/", "code": "LPS", "category": "String Algorithms"}, {"id": 294, "title": "Mirror Strings !!!", "url": "https://www.spoj.com/problems/MSUBSTR/", "code": "MSUBSTR", "category": "String Algorithms"}, {"id": 295, "title": "Extend to Palindrome", "url": "https://www.spoj.com/problems/EPALIN/", "code": "EPALIN", "category": "String Algorithms"}, {"id": 155, "title": "Sonya and Matrix Beauty", "url": "https://codeforces.com/contest/1080/problem/E", "code": "1080E", "category": "String Algorithms"}, {"id": 156, "title": "Xor-Paths", "url": "https://codeforces.com/problemset/problem/1006/F", "code": "1006F", "category": "BFS"}, {"id": 296, "title": "Subordinates", "url": "https://cses.fi/problemset/task/1674", "code": "CSES 1674", "category": "Tree's"}, {"id": 297, "title": "Tree Matching", "url": "https://cses.fi/problemset/task/1130", "code": "CSES 1130", "category": "Tree's"}, {"id": 157, "title": "Circumference of a Tree", "url": "https://codeforces.com/gym/102694/problem/A", "code": "102694A", "category": "Tree's"}, {"id": 158, "title": "Dynamic Diameter", "url": "https://codeforces.com/gym/102694/problem/B", "code": "102694B", "category": "Tree's"}, {"id": 159, "title": "Military Problem", "url": "https://codeforces.com/contest/1006/problem/E", "code": "1006E", "category": "Tree's"}, {"id": 298, "title": "Tree Distances II", "url": "https://cses.fi/problemset/task/1133", "code": "CSES 1133", "category": "Tree's"}, {"id": 160, "title": "Three Paths on a Tree", "url": "https://codeforces.com/contest/1294/problem/F", "code": "1294F", "category": "Tree's"}, {"id": 161, "title": "Sloth Naptime", "url": "https://codeforces.com/gym/102694/problem/C", "code": "102694C", "category": "LCA"}, {"id": 162, "title": "Cycle Free Flow", "url": "https://codeforces.com/gym/102694/problem/D", "code": "102694D", "category": "LCA"}, {"id": 163, "title": "Tree Queries", "url": "https://codeforces.com/contest/1328/problem/E", "code": "1328E", "category": "LCA"}, {"id": 164, "title": "1-Trees and Queries", "url": "https://codeforces.com/contest/1304/problem/E", "code": "1304E", "category": "LCA"}, {"id": 165, "title": "Blood Cousins", "url": "https://codeforces.com/contest/208/problem/E", "code": "208E", "category": "LCA"}, {"id": 166, "title": "Fools and Roads", "url": "https://codeforces.com/contest/191/problem/C", "code": "191C", "category": "LCA"}, {"id": 167, "title": "A and B and Lecture Rooms", "url": "https://codeforces.com/contest/519/problem/E", "code": "519E", "category": "LCA"}, {"id": 168, "title": "Duff-in-the-Army", "url": "https://codeforces.com/contest/587/problem/C", "code": "587C", "category": "LCA"}, {"id": 169, "title": "Minimum spanning tree for each edge", "url": "https://codeforces.com/contest/609/problem/E", "code": "609E", "category": "LCA"}, {"id": 170, "title": "Information Graph", "url": "https://codeforces.com/contest/466/problem/E", "code": "466E", "category": "LCA"}, {"id": 171, "title": "Filthy Rich Trees", "url": "https://codeforces.com/gym/102694/problem/E", "code": "102694E", "category": "LCA"}, {"id": 172, "title": "The-Lorax", "url": "https://codeforces.com/gym/102694/problem/F", "code": "102694F", "category": "LCA"}, {"id": 173, "title": "Two Buttons", "url": "https://codeforces.com/problemset/problem/520/B", "code": "520B", "category": "Graph Algorithms"}, {"id": 174, "title": "Party", "url": "https://codeforces.com/problemset/problem/115/A", "code": "115A", "category": "Graph Algorithms"}, {"id": 175, "title": "Kefa and Park", "url": "https://codeforces.com/problemset/problem/580/C", "code": "580C", "category": "Graph Algorithms"}, {"id": 176, "title": "Cyclic Components", "url": "https://codeforces.com/problemset/problem/977/E", "code": "977E", "category": "Graph Algorithms"}, {"id": 177, "title": "Graph Without Long Directed Paths", "url": "https://codeforces.com/contest/1144/problem/F", "code": "1144F", "category": "Graph Algorithms"}, {"id": 178, "title": "Fox And Names", "url": "https://codeforces.com/contest/510/problem/C", "code": "510C", "category": "Graph Algorithms"}, {"id": 179, "title": "Dijkstra?", "url": "https://codeforces.com/contest/20/problem/C", "code": "20C", "category": "Graph Algorithms"}, {"id": 180, "title": "Strongly Connected City", "url": "https://codeforces.com/problemset/problem/475/B", "code": "475B", "category": "Graph Algorithms"}, {"id": 181, "title": "Fair", "url": "https://codeforces.com/contest/986/problem/A", "code": "986A", "category": "Graph Algorithms"}, {"id": 182, "title": "King's Path", "url": "https://codeforces.com/contest/242/problem/C", "code": "242C", "category": "Graph Algorithms"}, {"id": 183, "title": "Monopole Magnets", "url": "https://codeforces.com/contest/1345/problem/D", "code": "1345D", "category": "Graph Algorithms"}, {"id": 184, "title": "Planets", "url": "https://codeforces.com/contest/229/problem/B", "code": "229B", "category": "Graph Algorithms"}, {"id": 185, "title": "Directing Edges", "url": "https://codeforces.com/contest/1385/problem/E", "code": "1385E", "category": "Graph Algorithms"}, {"id": 186, "title": "Greg and Graph", "url": "https://codeforces.com/contest/295/problem/B", "code": "295B", "category": "Graph Algorithms"}, {"id": 187, "title": "Unstable String Sort", "url": "https://codeforces.com/contest/1213/problem/F", "code": "1213F", "category": "Graph Algorithms"}, {"id": 188, "title": "Weights Distributing", "url": "https://codeforces.com/contest/1343/problem/E", "code": "1343E", "category": "Graph Algorithms"}, {"id": 189, "title": "String Coloring (easy version)", "url": "https://codeforces.com/contest/1296/problem/E1", "code": "1296E1", "category": "Graph Algorithms"}, {"id": 190, "title": "Book", "url": "https://codeforces.com/contest/1573/problem/C", "code": "1573C", "category": "Graph Algorithms"}, {"id": 191, "title": "How Many Paths?", "url": "https://codeforces.com/contest/1547/problem/G", "code": "1547G", "category": "Graph Algorithms"}, {"id": 192, "title": "Dima and Bacteria", "url": "https://codeforces.com/contest/400/problem/D", "code": "400D", "category": "Graph Algorithms"}, {"id": 193, "title": "Greedy Merchants", "url": "https://codeforces.com/contest/178/problem/B3", "code": "178B3", "category": "Graph Algorithms"}, {"id": 194, "title": "Plant", "url": "https://codeforces.com/problemset/problem/185/A", "code": "185A", "category": "Matrix Exponentiation"}, {"id": 195, "title": "Magic Gems", "url": "https://codeforces.com/contest/1117/problem/D", "code": "1117D", "category": "Matrix Exponentiation"}, {"id": 196, "title": "Once Again", "url": "https://codeforces.com/contest/582/problem/B", "code": "582B", "category": "Matrix Exponentiation"}, {"id": 197, "title": "Decoding Genome", "url": "https://codeforces.com/contest/222/problem/E", "code": "222E", "category": "Matrix Exponentiation"}, {"id": 198, "title": "Wet Shark and Blocks", "url": "https://codeforces.com/contest/621/problem/E", "code": "621E", "category": "Matrix Exponentiation"}, {"id": 199, "title": "Product Oriented Recurrence", "url": "https://codeforces.com/contest/1182/problem/E", "code": "1182E", "category": "Matrix Exponentiation"}, {"id": 200, "title": "Vasiliy's Multiset", "url": "https://codeforces.com/contest/706/problem/D", "code": "706D", "category": "Trie"}, {"id": 201, "title": "Perfect Security", "url": "https://codeforces.com/contest/948/problem/D", "code": "948D", "category": "Trie"}, {"id": 202, "title": "Beautiful Subarrays", "url": "https://codeforces.com/contest/665/problem/E", "code": "665E", "category": "Trie"}, {"id": 203, "title": "Dr. Evil Underscores", "url": "https://codeforces.com/contest/1285/problem/D", "code": "1285D", "category": "Trie"}, {"id": 204, "title": "Polycarp's phone book", "url": "https://codeforces.com/contest/858/problem/D", "code": "858D", "category": "Trie"}, {"id": 205, "title": "A Lot of Games", "url": "https://codeforces.com/contest/455/problem/B", "code": "455B", "category": "Trie"}, {"id": 206, "title": "Petr#", "url": "https://codeforces.com/contest/113/problem/B", "code": "113B", "category": "Trie"}, {"id": 207, "title": "Sausage Maximization", "url": "https://codeforces.com/contest/282/problem/E", "code": "282E", "category": "Trie"}, {"id": 208, "title": "Classy Numbers", "url": "https://codeforces.com/contest/1036/problem/C", "code": "1036C", "category": "Dynamic Programming"}, {"id": 209, "title": "QAQ", "url": "https://codeforces.com/problemset/problem/894/A", "code": "894A", "category": "Dynamic Programming"}, {"id": 210, "title": "Napoleon Cake", "url": "https://codeforces.com/problemset/problem/1501/B", "code": "1501B", "category": "Dynamic Programming"}, {"id": 211, "title": "Red and Blue", "url": "https://codeforces.com/problemset/problem/1469/B", "code": "1469B", "category": "Dynamic Programming"}, {"id": 212, "title": "Fence", "url": "https://codeforces.com/problemset/problem/363/B", "code": "363B", "category": "Dynamic Programming"}, {"id": 213, "title": "Ilya and Queries", "url": "https://codeforces.com/problemset/problem/313/B", "code": "313B", "category": "Dynamic Programming"}, {"id": 214, "title": "Flipping Game", "url": "https://codeforces.com/problemset/problem/327/A", "code": "327A", "category": "Dynamic Programming"}, {"id": 215, "title": "Lecture Sleep", "url": "https://codeforces.com/problemset/problem/961/B", "code": "961B", "category": "Dynamic Programming"}, {"id": 216, "title": "Reposts", "url": "https://codeforces.com/problemset/problem/522/A", "code": "522A", "category": "Dynamic Programming"}, {"id": 217, "title": "Vitamins", "url": "https://codeforces.com/problemset/problem/1042/B", "code": "1042B", "category": "Dynamic Programming"}, {"id": 218, "title": "Cut Ribbon", "url": "https://codeforces.com/problemset/problem/189/A", "code": "189A", "category": "Dynamic Programming"}, {"id": 219, "title": "Pokémon Army (easy version)", "url": "https://codeforces.com/problemset/problem/1420/C1", "code": "1420C1", "category": "Dynamic Programming"}, {"id": 220, "title": "Mashmokh and ACM", "url": "https://codeforces.com/problemset/problem/414/B", "code": "414B", "category": "Dynamic Programming"}, {"id": 221, "title": "Basketball Exercise", "url": "https://codeforces.com/problemset/problem/1195/C", "code": "1195C", "category": "Dynamic Programming"}, {"id": 222, "title": "Orac and Models", "url": "https://codeforces.com/problemset/problem/1350/B", "code": "1350B", "category": "Dynamic Programming"}, {"id": 223, "title": "Mr. Kitayuta, the Treasure Hunter", "url": "https://codeforces.com/contest/505/problem/C", "code": "505C", "category": "Dynamic Programming"}, {"id": 224, "title": "Modulo Sum", "url": "https://codeforces.com/contest/577/problem/B", "code": "577B", "category": "Dynamic Programming"}, {"id": 225, "title": "Little Elephant and Interval", "url": "https://codeforces.com/contest/204/problem/A", "code": "204A", "category": "Dynamic Programming"}, {"id": 226, "title": "Painting Fence", "url": "https://codeforces.com/contest/448/problem/C", "code": "448C", "category": "Dynamic Programming"}, {"id": 227, "title": "Riding in a Lift", "url": "https://codeforces.com/contest/479/problem/E", "code": "479E", "category": "Dynamic Programming"}, {"id": 228, "title": "Roman and Numbers", "url": "https://codeforces.com/contest/401/problem/D", "code": "401D", "category": "Dynamic Programming"}, {"id": 229, "title": "Hanoi Factory", "url": "https://codeforces.com/contest/777/problem/E", "code": "777E", "category": "Dynamic Programming"}, {"id": 230, "title": "Choosing Capital for Treeland", "url": "https://codeforces.com/contest/219/problem/D", "code": "219D", "category": "Dynamic Programming"}, {"id": 231, "title": "Book of Evil", "url": "https://codeforces.com/contest/337/problem/D", "code": "337D", "category": "Dynamic Programming"}, {"id": 232, "title": "Compatible Numbers", "url": "https://codeforces.com/contest/165/problem/E", "code": "165E", "category": "Dynamic Programming"}, {"id": 233, "title": "The Values You Can Make", "url": "https://codeforces.com/contest/687/problem/C", "code": "687C", "category": "Dynamic Programming"}, {"id": 234, "title": "Clear the String", "url": "https://codeforces.com/contest/1132/problem/F", "code": "1132F", "category": "Dynamic Programming"}, {"id": 235, "title": "Antenna Coverage", "url": "https://codeforces.com/contest/1253/problem/E", "code": "1253E", "category": "Dynamic Programming"}, {"id": 236, "title": "Wi-Fi", "url": "https://codeforces.com/contest/1216/problem/F", "code": "1216F", "category": "Dynamic Programming"}, {"id": 237, "title": "Appleman and Tree", "url": "https://codeforces.com/contest/461/problem/B", "code": "461B", "category": "Dynamic Programming"}, {"id": 238, "title": "Kalila and Dimna in the Logging Industry", "url": "https://codeforces.com/contest/319/problem/C", "code": "319C", "category": "Dynamic Programming"}, {"id": 239, "title": "The Fair Nut and Rectangles", "url": "https://codeforces.com/contest/1083/problem/E", "code": "1083E", "category": "Dynamic Programming"}, {"id": 240, "title": "The Maths Lecture", "url": "https://codeforces.com/contest/507/problem/D", "code": "507D", "category": "Dynamic Programming"}, {"id": 241, "title": "Bad Luck Island", "url": "https://codeforces.com/contest/540/problem/D", "code": "540D", "category": "Dynamic Programming"}, {"id": 242, "title": "Little Alawn's Puzzle", "url": "https://codeforces.com/problemset/problem/1534/C", "code": "1534C", "category": "Disjoint Set"}, {"id": 243, "title": "Ice Skating", "url": "https://codeforces.com/problemset/problem/217/A", "code": "217A", "category": "Disjoint Set"}, {"id": 244, "title": "Learning Languages", "url": "https://codeforces.com/contest/277/problem/A", "code": "277A", "category": "Disjoint Set"}, {"id": 245, "title": "Bertown Subway", "url": "https://codeforces.com/contest/884/problem/C", "code": "884C", "category": "Disjoint Set"}, {"id": 246, "title": "K-Complete Word", "url": "https://codeforces.com/contest/1332/problem/C", "code": "1332C", "category": "Disjoint Set"}, {"id": 247, "title": "Civilization", "url": "https://codeforces.com/contest/455/problem/C", "code": "455C", "category": "Disjoint Set"}, {"id": 248, "title": "0-1-Tree", "url": "https://codeforces.com/contest/1156/problem/D", "code": "1156D", "category": "Disjoint Set"}, {"id": 249, "title": "Path Queries", "url": "https://codeforces.com/contest/1213/problem/G", "code": "1213G", "category": "Disjoint Set"}, {"id": 250, "title": "Dogeforces", "url": "https://codeforces.com/problemset/problem/1494/D", "code": "1494D", "category": "Disjoint Set"}, {"id": 251, "title": "Powerful array", "url": "https://codeforces.com/contest/86/problem/D", "code": "86D", "category": "Sqrt Decomposition/ MO’s algo"}, {"id": 252, "title": "XOR and Favorite Number", "url": "https://codeforces.com/contest/617/problem/E", "code": "617E", "category": "Sqrt Decomposition/ MO’s algo"}, {"id": 253, "title": "Little Elephant and Array", "url": "https://codeforces.com/contest/220/problem/B", "code": "220B", "category": "Sqrt Decomposition/ MO’s algo"}, {"id": 254, "title": "Cut and Stick", "url": "https://codeforces.com/contest/1514/problem/D", "code": "1514D", "category": "Sqrt Decomposition/ MO’s algo"}, {"id": 255, "title": "Tree and Queries", "url": "https://codeforces.com/contest/375/problem/D", "code": "375D", "category": "Sqrt Decomposition/ MO’s algo"}, {"id": 256, "title": "XOR on Segment", "url": "https://codeforces.com/contest/242/problem/E", "code": "242E", "category": "Sqrt Decomposition/ MO’s algo"}, {"id": 257, "title": "Enemy is weak", "url": "https://codeforces.com/contest/61/problem/E", "code": "61E", "category": "Fenwick Tree"}, {"id": 258, "title": "Moving Points", "url": "https://codeforces.com/contest/1311/problem/F", "code": "1311F", "category": "Fenwick Tree"}, {"id": 259, "title": "Cows and Sequence", "url": "https://codeforces.com/contest/283/problem/A", "code": "283A", "category": "Fenwick Tree"}, {"id": 260, "title": "Pashmak and Parmida's problem", "url": "https://codeforces.com/contest/459/problem/D", "code": "459D", "category": "Fenwick Tree"}, {"id": 261, "title": "Bubble Sort Graph", "url": "https://codeforces.com/contest/340/problem/D", "code": "340D", "category": "Fenwick Tree"}, {"id": 262, "title": "Vasya and a Tree", "url": "https://codeforces.com/contest/1076/problem/E", "code": "1076E", "category": "Fenwick Tree"}, {"id": 263, "title": "Multiset", "url": "https://codeforces.com/contest/1354/problem/D", "code": "1354D", "category": "Fenwick Tree"}, {"id": 264, "title": "Fixed Point Removal", "url": "https://codeforces.com/contest/1405/problem/E", "code": "1405E", "category": "Fenwick Tree"}, {"id": 265, "title": "Propagating tree", "url": "https://codeforces.com/contest/383/problem/C", "code": "383C", "category": "Fenwick Tree"}, {"id": 266, "title": "Kill Anton", "url": "https://codeforces.com/contest/1526/problem/D", "code": "1526D", "category": "Fenwick Tree"}, {"id": 267, "title": "Little Girl and Problem on Trees", "url": "https://codeforces.com/contest/276/problem/E", "code": "276E", "category": "Fenwick Tree"}, {"id": 268, "title": "Tree and Queries", "url": "https://codeforces.com/contest/375/problem/D", "code": "375D", "category": "Fenwick Tree"}, {"id": 269, "title": "Xenia and Bit Operations", "url": "https://codeforces.com/contest/339/problem/D", "code": "339D", "category": "Segment Tree(lazy also included)"}, {"id": 270, "title": "Bash and a Tough Math Puzzle", "url": "https://codeforces.com/contest/914/problem/D", "code": "914D", "category": "Segment Tree(lazy also included)"}, {"id": 271, "title": "Pashmak and Parmida's problem", "url": "https://codeforces.com/contest/459/problem/D", "code": "459D", "category": "Segment Tree(lazy also included)"}, {"id": 272, "title": "Sereja and Brackets", "url": "https://codeforces.com/contest/380/problem/C", "code": "380C", "category": "Segment Tree(lazy also included)"}, {"id": 273, "title": "Ant colony", "url": "https://codeforces.com/contest/474/problem/F", "code": "474F", "category": "Segment Tree(lazy also included)"}, {"id": 274, "title": "Balanced Playlist", "url": "https://codeforces.com/contest/1237/problem/D", "code": "1237D", "category": "Segment Tree(lazy also included)"}, {"id": 275, "title": "Copying Data", "url": "https://codeforces.com/contest/292/problem/E", "code": "292E", "category": "Segment Tree(lazy also included)"}, {"id": 276, "title": "Interesting Array", "url": "https://codeforces.com/contest/482/problem/B", "code": "482B", "category": "Segment Tree(lazy also included)"}, {"id": 277, "title": "Subarray Sorting", "url": "https://codeforces.com/contest/1187/problem/D", "code": "1187D", "category": "Segment Tree(lazy also included)"}, {"id": 278, "title": "SUM and REPLACE", "url": "https://codeforces.com/contest/920/problem/F", "code": "920F", "category": "Segment Tree(lazy also included)"}, {"id": 279, "title": "Playoff Tournament", "url": "https://codeforces.com/contest/1535/problem/D?locale=en", "code": "1535D", "category": "Segment Tree(lazy also included)"}, {"id": 280, "title": "The Child and Sequence", "url": "https://codeforces.com/contest/438/problem/D?locale=en", "code": "438D", "category": "Segment Tree(lazy also included)"}, {"id": 281, "title": "Equilibrium", "url": "https://codeforces.com/contest/1556/problem/E", "code": "1556E", "category": "Segment Tree(lazy also included)"}, {"id": 282, "title": "Non-Decreasing Dilemma", "url": "https://codeforces.com/contest/1567/problem/E", "code": "1567E", "category": "Segment Tree(lazy also included)"}, {"id": 283, "title": "Circular RMQ", "url": "https://codeforces.com/contest/52/problem/C", "code": "52C", "category": "Lazy propagation"}, {"id": 284, "title": "Array Restoration", "url": "https://codeforces.com/contest/1023/problem/D", "code": "1023D", "category": "Lazy propagation"}, {"id": 285, "title": "XOR on Segment", "url": "https://codeforces.com/contest/242/problem/E", "code": "242E", "category": "Lazy propagation"}, {"id": 286, "title": "Ezzat and Grid", "url": "https://codeforces.com/contest/1557/problem/D", "code": "1557D", "category": "Lazy propagation"}, {"id": 287, "title": "Lucky Queries", "url": "https://codeforces.com/contest/145/problem/E", "code": "145E", "category": "Lazy propagation"}, {"id": 288, "title": "Hanoi Factory", "url": "https://codeforces.com/contest/777/problem/E", "code": "777E", "category": "Lazy propagation"}]</script>
+<script type="application/json" id="problem-data">[{"id":1,"title":"Bit++","url":"https://codeforces.com/problemset/problem/282/A","code":"282A","category":"Implementation / Constructive"},{"id":2,"title":"Chewbaсca and Number","url":"https://codeforces.com/contest/514/problem/A","code":"514A","category":"Implementation / Constructive"},{"id":3,"title":"Beautiful Matrix","url":"https://codeforces.com/problemset/problem/263/A","code":"263A","category":"Implementation / Constructive"},{"id":4,"title":"Soft Drinking","url":"https://codeforces.com/problemset/problem/151/A","code":"151A","category":"Implementation / Constructive"},{"id":5,"title":"The New Year: Meeting Friends","url":"https://codeforces.com/problemset/problem/723/A","code":"723A","category":"Implementation / Constructive"},{"id":6,"title":"Sum of Round Numbers","url":"https://codeforces.com/problemset/problem/1352/A","code":"1352A","category":"Implementation / Constructive"},{"id":7,"title":"Fox And Snake","url":"https://codeforces.com/problemset/problem/510/A","code":"510A","category":"Implementation / Constructive"},{"id":8,"title":"Anton and Polyhedrons","url":"https://codeforces.com/problemset/problem/785/A","code":"785A","category":"Implementation / Constructive"},{"id":9,"title":"Arrival of the General","url":"https://codeforces.com/problemset/problem/144/A","code":"144A","category":"Implementation / Constructive"},{"id":10,"title":"In Search of an Easy Problem","url":"https://codeforces.com/problemset/problem/1030/A","code":"1030A","category":"Implementation / Constructive"},{"id":11,"title":"Presents","url":"https://codeforces.com/problemset/problem/136/A","code":"136A","category":"Implementation / Constructive"},{"id":12,"title":"Nearly Lucky Number","url":"https://codeforces.com/problemset/problem/110/A","code":"110A","category":"Implementation / Constructive"},{"id":13,"title":"Tram","url":"https://codeforces.com/problemset/problem/116/A","code":"116A","category":"Implementation / Constructive"},{"id":14,"title":"Wrong Subtraction","url":"https://codeforces.com/problemset/problem/977/A","code":"977A","category":"Implementation / Constructive"},{"id":15,"title":"Soldier and Bananas","url":"https://codeforces.com/problemset/problem/546/A","code":"546A","category":"Implementation / Constructive"},{"id":16,"title":"Bear and Big Brother","url":"https://codeforces.com/problemset/problem/791/A","code":"791A","category":"Implementation / Constructive"},{"id":17,"title":"Boy or Girl","url":"https://codeforces.com/problemset/problem/236/A","code":"236A","category":"Implementation / Constructive"},{"id":18,"title":"Word Capitalization","url":"https://codeforces.com/problemset/problem/281/A","code":"281A","category":"Implementation / Constructive"},{"id":19,"title":"Helpful Maths","url":"https://codeforces.com/problemset/problem/339/A","code":"339A","category":"Implementation / Constructive"},{"id":20,"title":"C+=","url":"https://codeforces.com/problemset/problem/1368/A","code":"1368A","category":"Implementation / Constructive"},{"id":21,"title":"Maximum Increase","url":"https://codeforces.com/problemset/problem/702/A","code":"702A","category":"Implementation / Constructive"},{"id":22,"title":"Gennady and a Card Game","url":"https://codeforces.com/problemset/problem/1097/A","code":"1097A","category":"Implementation / Constructive"},{"id":23,"title":"Vanya and Cubes","url":"https://codeforces.com/problemset/problem/492/A","code":"492A","category":"Implementation / Constructive"},{"id":24,"title":"Boring Apartments","url":"https://codeforces.com/problemset/problem/1433/A","code":"1433A","category":"Implementation / Constructive"},{"id":25,"title":"Erasing Zeroes","url":"https://codeforces.com/problemset/problem/1303/A","code":"1303A","category":"Implementation / Constructive"},{"id":26,"title":"Repeating Cipher","url":"https://codeforces.com/problemset/problem/1095/A","code":"1095A","category":"Implementation / Constructive"},{"id":27,"title":"Fix You","url":"https://codeforces.com/problemset/problem/1391/B","code":"1391B","category":"Implementation / Constructive"},{"id":28,"title":"String Task","url":"https://codeforces.com/problemset/problem/118/A","code":"118A","category":"Implementation / Constructive"},{"id":29,"title":"Assigning to Classes","url":"https://codeforces.com/problemset/problem/1300/B","code":"1300B","category":"Implementation / Constructive"},{"id":30,"title":"Numbers on Whiteboard","url":"https://codeforces.com/problemset/problem/1430/C","code":"1430C","category":"Implementation / Constructive"},{"id":31,"title":"Petr and Book","url":"https://codeforces.com/contest/139/problem/A","code":"139A","category":"Implementation / Constructive"},{"id":32,"title":"k-String","url":"https://codeforces.com/problemset/problem/219/A","code":"219A","category":"Implementation / Constructive"},{"id":33,"title":"Game 23","url":"https://codeforces.com/problemset/problem/1141/A","code":"1141A","category":"Implementation / Constructive"},{"id":34,"title":"Present from Lena","url":"https://codeforces.com/problemset/problem/118/B","code":"118B","category":"Implementation / Constructive"},{"id":35,"title":"Donut Shops","url":"https://codeforces.com/problemset/problem/1373/A","code":"1373A","category":"Implementation / Constructive"},{"id":36,"title":"Buttons","url":"https://codeforces.com/problemset/problem/268/B","code":"268B","category":"Implementation / Constructive"},{"id":37,"title":"Dreamoon and Stairs","url":"https://codeforces.com/problemset/problem/476/A","code":"476A","category":"Implementation / Constructive"},{"id":38,"title":"New Year Transportation","url":"https://codeforces.com/problemset/problem/500/A","code":"500A","category":"Implementation / Constructive"},{"id":39,"title":"cAPS lOCK","url":"https://codeforces.com/problemset/problem/131/A","code":"131A","category":"Implementation / Constructive"},{"id":40,"title":"Chocolates","url":"https://codeforces.com/problemset/problem/1139/B","code":"1139B","category":"Implementation / Constructive"},{"id":41,"title":"City Day","url":"https://codeforces.com/problemset/problem/1199/A","code":"1199A","category":"Implementation / Constructive"},{"id":42,"title":"Diverse Substring","url":"https://codeforces.com/problemset/problem/1073/A","code":"1073A","category":"Implementation / Constructive"},{"id":43,"title":"Lucky Sum of Digits","url":"https://codeforces.com/problemset/problem/109/A","code":"109A","category":"Implementation / Constructive"},{"id":44,"title":"Rooms and Staircases","url":"https://codeforces.com/problemset/problem/1244/B","code":"1244B","category":"Implementation / Constructive"},{"id":45,"title":"Palindromic Twist","url":"https://codeforces.com/problemset/problem/1027/A","code":"1027A","category":"Implementation / Constructive"},{"id":46,"title":"Shuffle Hashing","url":"https://codeforces.com/problemset/problem/1278/A","code":"1278A","category":"Implementation / Constructive"},{"id":47,"title":"Middle of the Contest","url":"https://codeforces.com/problemset/problem/1133/A","code":"1133A","category":"Implementation / Constructive"},{"id":48,"title":"OR in Matrix","url":"https://codeforces.com/problemset/problem/486/B","code":"486B","category":"Implementation / Constructive"},{"id":49,"title":"Balanced Rating Changes","url":"https://codeforces.com/problemset/problem/1237/A","code":"1237A","category":"Implementation / Constructive"},{"id":50,"title":"Amr and Music","url":"https://codeforces.com/problemset/problem/507/A","code":"507A","category":"Implementation / Constructive"},{"id":51,"title":"Ichihime and Triangle","url":"https://codeforces.com/problemset/problem/1337/A","code":"1337A","category":"Maths"},{"id":52,"title":"LCM Problem","url":"https://codeforces.com/problemset/problem/1389/A","code":"1389A","category":"Maths"},{"id":53,"title":"Mahmoud and Ehab and the even-odd game","url":"https://codeforces.com/problemset/problem/959/A","code":"959A","category":"Maths"},{"id":54,"title":"Array with Odd Sum","url":"https://codeforces.com/problemset/problem/1296/A","code":"1296A","category":"Maths"},{"id":55,"title":"Floor Number","url":"https://codeforces.com/problemset/problem/1426/A","code":"1426A","category":"Maths"},{"id":56,"title":"Three Pairwise Maximums","url":"https://codeforces.com/problemset/problem/1385/A","code":"1385A","category":"Maths"},{"id":57,"title":"Park Lighting","url":"https://codeforces.com/problemset/problem/1358/A","code":"1358A","category":"Maths"},{"id":58,"title":"Collecting Coins","url":"https://codeforces.com/problemset/problem/1294/A","code":"1294A","category":"Maths"},{"id":59,"title":"Required Remainder","url":"https://codeforces.com/problemset/problem/1374/A","code":"1374A","category":"Maths"},{"id":60,"title":"Magical Sticks","url":"https://codeforces.com/problemset/problem/1371/A","code":"1371A","category":"Maths"},{"id":61,"title":"Minimal Square","url":"https://codeforces.com/problemset/problem/1360/A","code":"1360A","category":"Maths"},{"id":62,"title":"Even Array","url":"https://codeforces.com/problemset/problem/1367/B","code":"1367B","category":"Maths"},{"id":63,"title":"Most Unstable Array","url":"https://codeforces.com/problemset/problem/1353/A","code":"1353A","category":"Maths"},{"id":64,"title":"Balanced Array","url":"https://codeforces.com/problemset/problem/1343/B","code":"1343B","category":"Maths"},{"id":65,"title":"Buy a Shovel","url":"https://codeforces.com/problemset/problem/732/A","code":"732A","category":"Maths"},{"id":66,"title":"Restoring Three Numbers","url":"https://codeforces.com/problemset/problem/1154/A","code":"1154A","category":"Maths"},{"id":67,"title":"Yet Another Two Integers Problem","url":"https://codeforces.com/problemset/problem/1409/A","code":"1409A","category":"Maths"},{"id":68,"title":"Candies and Two Sisters","url":"https://codeforces.com/problemset/problem/1335/A","code":"1335A","category":"Maths"},{"id":69,"title":"Divisibility Problem","url":"https://codeforces.com/problemset/problem/1328/A","code":"1328A","category":"Maths"},{"id":70,"title":"Elephant","url":"https://codeforces.com/problemset/problem/617/A","code":"617A","category":"Maths"},{"id":71,"title":"Domino piling","url":"https://codeforces.com/problemset/problem/50/A","code":"50A","category":"Maths"},{"id":72,"title":"Emotes","url":"https://codeforces.com/problemset/problem/1117/B","code":"1117B","category":"Maths"},{"id":73,"title":"Drinks Choosing","url":"https://codeforces.com/problemset/problem/1195/A","code":"1195A","category":"Maths"},{"id":74,"title":"Chunga-Changa","url":"https://codeforces.com/problemset/problem/1181/A","code":"1181A","category":"Maths"},{"id":75,"title":"Dice Tower","url":"https://codeforces.com/problemset/problem/1266/B","code":"1266B","category":"Maths"},{"id":76,"title":"Digital root","url":"https://codeforces.com/problemset/problem/1107/B","code":"1107B","category":"Maths"},{"id":77,"title":"Heating","url":"https://codeforces.com/problemset/problem/1260/A","code":"1260A","category":"Maths"},{"id":78,"title":"Competitive Programmer","url":"https://codeforces.com/problemset/problem/1266/A","code":"1266A","category":"Maths"},{"id":79,"title":"Triangles on a Rectangle","url":"https://codeforces.com/problemset/problem/1620/B","code":"1620B","category":"Maths"},{"id":80,"title":"Pasha and Stick","url":"https://codeforces.com/problemset/problem/610/A","code":"610A","category":"Maths"},{"id":81,"title":"Young Physicist","url":"https://codeforces.com/problemset/problem/69/A","code":"69A","category":"Maths"},{"id":82,"title":"Theatre-Square","url":"https://codeforces.com/problemset/problem/1/A","code":"1A","category":"Maths"},{"id":83,"title":"Water Lily","url":"https://codeforces.com/problemset/problem/1199/B","code":"1199B","category":"Maths"},{"id":84,"title":"Magic Stick","url":"https://codeforces.com/problemset/problem/1257/B","code":"1257B","category":"Maths"},{"id":85,"title":"BowWow and the Timetable","url":"https://codeforces.com/problemset/problem/1204/A","code":"1204A","category":"Maths"},{"id":86,"title":"Drazil and Date","url":"https://codeforces.com/problemset/problem/515/A","code":"515A","category":"Maths"},{"id":87,"title":"Boboniu Likes to Color Balls","url":"https://codeforces.com/problemset/problem/1395/A","code":"1395A","category":"Maths"},{"id":88,"title":"Lovely Palindromes","url":"https://codeforces.com/problemset/problem/688/B","code":"688B","category":"Maths"},{"id":89,"title":"String LCM","url":"https://codeforces.com/problemset/problem/1473/B","code":"1473B","category":"Maths"},{"id":90,"title":"K-divisible Sum","url":"https://codeforces.com/problemset/problem/1476/A","code":"1476A","category":"Maths"},{"id":91,"title":"Berland Poker","url":"https://codeforces.com/problemset/problem/1359/A","code":"1359A","category":"Maths"},{"id":92,"title":"Road To Zero","url":"https://codeforces.com/problemset/problem/1342/A","code":"1342A","category":"Maths"},{"id":93,"title":"Dungeon","url":"https://codeforces.com/problemset/problem/1463/A","code":"1463A","category":"Maths"},{"id":94,"title":"Caisa and Pylons","url":"https://codeforces.com/problemset/problem/463/B","code":"463B","category":"Maths"},{"id":95,"title":"GCD Length","url":"https://codeforces.com/problemset/problem/1511/B","code":"1511B","category":"Maths"},{"id":96,"title":"Lucky Numbers","url":"https://codeforces.com/problemset/problem/630/C","code":"630C","category":"Maths"},{"id":97,"title":"Number Circle","url":"https://codeforces.com/problemset/problem/1189/B","code":"1189B","category":"Maths"},{"id":98,"title":"Non-Coprime Partition","url":"https://codeforces.com/problemset/problem/1038/B","code":"1038B","category":"Maths"},{"id":99,"title":"Hexagons!","url":"https://codeforces.com/problemset/problem/630/D","code":"630D","category":"Maths"},{"id":100,"title":"Sequence with Digits","url":"https://codeforces.com/problemset/problem/1355/A","code":"1355A","category":"Maths"},{"id":101,"title":"Hamburgers","url":"https://codeforces.com/contest/371/problem/C","code":"371C","category":"Binary Search"},{"id":102,"title":"Magic Powder - 1","url":"https://codeforces.com/contest/670/problem/D1","code":"670D1","category":"Binary Search"},{"id":103,"title":"Pipeline","url":"https://codeforces.com/contest/287/problem/B","code":"287B","category":"Binary Search"},{"id":104,"title":"Poisoned Dagger","url":"https://codeforces.com/problemset/problem/1613/C","code":"1613C","category":"Binary Search"},{"id":105,"title":"Mike and Chocolate Thieves","url":"https://codeforces.com/contest/689/problem/C","code":"689C","category":"Binary Search"},{"id":106,"title":"Increasing by Modulo","url":"https://codeforces.com/contest/1169/problem/C","code":"1169C","category":"Binary Search"},{"id":107,"title":"Vasya and Robot","url":"https://codeforces.com/contest/1073/problem/C","code":"1073C","category":"Binary Search"},{"id":108,"title":"Multiplication Table","url":"https://codeforces.com/contest/448/problem/D","code":"448D","category":"Binary Search"},{"id":109,"title":"Stressful Training","url":"https://codeforces.com/contest/1132/problem/D","code":"1132D","category":"Binary Search"},{"id":110,"title":"Water Taps","url":"https://codeforces.com/contest/954/problem/E","code":"954E","category":"Binary Search"},{"id":111,"title":"Minimax Problem","url":"https://codeforces.com/contest/1288/problem/D","code":"1288D","category":"Binary Search"},{"id":112,"title":"Odd-Even Subsequence","url":"https://codeforces.com/contest/1370/problem/D","code":"1370D","category":"Binary Search"},{"id":289,"title":"Prime Generator","url":"https://www.spoj.com/problems/PRIME1/","code":"PRIME1","category":"Prime, Sieve, Prime Factorisation"},{"id":290,"title":"Printing some primes","url":"https://www.spoj.com/problems/TDPRIMES/","code":"TDPRIMES","category":"Prime, Sieve, Prime Factorisation"},{"id":291,"title":"Finding the Kth Prime","url":"https://www.spoj.com/problems/TDKPRIME/","code":"TDKPRIME","category":"Prime, Sieve, Prime Factorisation"},{"id":113,"title":"Good Sequences","url":"https://codeforces.com/contest/264/problem/B","code":"264B","category":"Prime, Sieve, Prime Factorisation"},{"id":114,"title":"Taxes","url":"https://codeforces.com/contest/735/problem/D","code":"735D","category":"Prime, Sieve, Prime Factorisation"},{"id":115,"title":"Soldier and Number Game","url":"https://codeforces.com/contest/546/problem/D","code":"546D","category":"Prime, Sieve, Prime Factorisation"},{"id":116,"title":"Reducing Fractions","url":"https://codeforces.com/contest/222/problem/C","code":"222C","category":"Prime, Sieve, Prime Factorisation"},{"id":117,"title":"Petya and Divisors","url":"https://codeforces.com/problemset/problem/111/B","code":"111B","category":"Prime, Sieve, Prime Factorisation"},{"id":118,"title":"Primes and Multiplication","url":"https://codeforces.com/contest/1228/problem/C","code":"1228C","category":"Prime, Sieve, Prime Factorisation"},{"id":119,"title":"GCD Counting","url":"https://codeforces.com/contest/1101/problem/D","code":"1101D","category":"Prime, Sieve, Prime Factorisation"},{"id":120,"title":"New Year's Eve","url":"https://codeforces.com/problemset/problem/912/B","code":"912B","category":"Bit Manipulation/Power Set"},{"id":121,"title":"Special Numbers","url":"https://codeforces.com/problemset/problem/1594/B","code":"1594B","category":"Bit Manipulation/Power Set"},{"id":122,"title":"Petr and a Combination Lock","url":"https://codeforces.com/problemset/problem/1097/B","code":"1097B","category":"Bit Manipulation/Power Set"},{"id":123,"title":"Array Elimination","url":"https://codeforces.com/contest/1602/problem/C","code":"1602C","category":"Bit Manipulation/Power Set"},{"id":124,"title":"Powers Of Two","url":"https://codeforces.com/problemset/problem/1095/C","code":"1095C","category":"Bit Manipulation/Power Set"},{"id":125,"title":"Berland Crossword","url":"https://codeforces.com/problemset/problem/1494/B","code":"1494B","category":"Bit Manipulation/Power Set"},{"id":126,"title":"Dima and a Bad XOR","url":"https://codeforces.com/problemset/problem/1151/B","code":"1151B","category":"Bit Manipulation/Power Set"},{"id":127,"title":"p-binary","url":"https://codeforces.com/problemset/problem/1225/C","code":"1225C","category":"Bit Manipulation/Power Set"},{"id":128,"title":"Ehab and the Expected XOR Problem","url":"https://codeforces.com/contest/1174/problem/D","code":"1174D","category":"Bit Manipulation/Power Set"},{"id":129,"title":"505","url":"https://codeforces.com/problemset/problem/1391/D","code":"1391D","category":"Bit Manipulation/Power Set"},{"id":130,"title":"Zookeeper and The Infinite Zoo","url":"https://codeforces.com/problemset/problem/1491/D","code":"1491D","category":"Bit Manipulation/Power Set"},{"id":131,"title":"Alternating Current","url":"https://codeforces.com/contest/343/problem/B","code":"343B","category":"Stack/Queues/PriorityQueues"},{"id":132,"title":"Cd and pwd commands","url":"https://codeforces.com/contest/158/problem/C","code":"158C","category":"Stack/Queues/PriorityQueues"},{"id":133,"title":"Longest Regular Bracket Sequence","url":"https://codeforces.com/contest/5/problem/C","code":"5C","category":"Stack/Queues/PriorityQueues"},{"id":134,"title":"Pair of Numbers","url":"https://codeforces.com/contest/359/problem/D","code":"359D","category":"Stack/Queues/PriorityQueues"},{"id":135,"title":"Great Vova Wall (Version 1)","url":"https://codeforces.com/contest/1092/problem/D1","code":"1092D1","category":"Stack/Queues/PriorityQueues"},{"id":136,"title":"Skyscrapers (hard version)","url":"https://codeforces.com/contest/1313/problem/C2","code":"1313C2","category":"Stack/Queues/PriorityQueues"},{"id":137,"title":"Phoenix and Towers","url":"https://codeforces.com/contest/1515/problem/C","code":"1515C","category":"Stack/Queues/PriorityQueues"},{"id":138,"title":"Psychos in a Line","url":"https://codeforces.com/contest/319/problem/B","code":"319B","category":"Stack/Queues/PriorityQueues"},{"id":139,"title":"Strip","url":"https://codeforces.com/contest/487/problem/B","code":"487B","category":"Stack/Queues/PriorityQueues"},{"id":140,"title":"Great Vova Wall (Version 2)","url":"https://codeforces.com/contest/1092/problem/D2","code":"1092D2","category":"Stack/Queues/PriorityQueues"},{"id":141,"title":"Special Segments of Permutation","url":"https://codeforces.com/contest/1156/problem/E","code":"1156E","category":"Stack/Queues/PriorityQueues"},{"id":142,"title":"Stack Sorting","url":"https://codeforces.com/contest/911/problem/E","code":"911E","category":"Stack/Queues/PriorityQueues"},{"id":143,"title":"Breaking Good","url":"https://codeforces.com/contest/507/problem/E?locale=en","code":"507E","category":"Stack/Queues/PriorityQueues"},{"id":144,"title":"Good Substrings","url":"https://codeforces.com/problemset/problem/271/D","code":"271D","category":"String Algorithms"},{"id":145,"title":"Prefix-Suffix Palindrome (Hard version)","url":"https://codeforces.com/contest/1326/problem/D2","code":"1326D2","category":"String Algorithms"},{"id":146,"title":"Watto and Mechanism","url":"https://codeforces.com/contest/514/problem/C","code":"514C","category":"String Algorithms"},{"id":147,"title":"Palindrome Degree","url":"https://codeforces.com/contest/7/problem/D","code":"7D","category":"String Algorithms"},{"id":148,"title":"Spy Syndrome 2","url":"https://codeforces.com/contest/633/problem/C","code":"633C","category":"String Algorithms"},{"id":149,"title":"Segment Occurrences","url":"https://codeforces.com/contest/1016/problem/B","code":"1016B","category":"String Algorithms"},{"id":150,"title":"Password","url":"https://codeforces.com/problemset/problem/126/B","code":"126B","category":"String Algorithms"},{"id":151,"title":"MUH and Cube Walls","url":"https://codeforces.com/contest/471/problem/D","code":"471D","category":"String Algorithms"},{"id":152,"title":"Camp Schedule","url":"https://codeforces.com/contest/1138/problem/D","code":"1138D","category":"String Algorithms"},{"id":153,"title":"Prefixes and Suffixes","url":"https://codeforces.com/contest/432/problem/D","code":"432D","category":"String Algorithms"},{"id":154,"title":"Erase and Extend (Hard Version)","url":"https://codeforces.com/contest/1537/problem/E2","code":"1537E2","category":"String Algorithms"},{"id":292,"title":"Number of Palindromes","url":"https://www.spoj.com/problems/NUMOFPAL/","code":"NUMOFPAL","category":"String Algorithms"},{"id":293,"title":"Longest Palindromic Substring","url":"https://www.spoj.com/problems/LPS/","code":"LPS","category":"String Algorithms"},{"id":294,"title":"Mirror Strings !!!","url":"https://www.spoj.com/problems/MSUBSTR/","code":"MSUBSTR","category":"String Algorithms"},{"id":295,"title":"Extend to Palindrome","url":"https://www.spoj.com/problems/EPALIN/","code":"EPALIN","category":"String Algorithms"},{"id":155,"title":"Sonya and Matrix Beauty","url":"https://codeforces.com/contest/1080/problem/E","code":"1080E","category":"String Algorithms"},{"id":156,"title":"Xor-Paths","url":"https://codeforces.com/problemset/problem/1006/F","code":"1006F","category":"BFS"},{"id":296,"title":"Subordinates","url":"https://cses.fi/problemset/task/1674","code":"CSES 1674","category":"Tree's"},{"id":297,"title":"Tree Matching","url":"https://cses.fi/problemset/task/1130","code":"CSES 1130","category":"Tree's"},{"id":157,"title":"Circumference of a Tree","url":"https://codeforces.com/gym/102694/problem/A","code":"102694A","category":"Tree's"},{"id":158,"title":"Dynamic Diameter","url":"https://codeforces.com/gym/102694/problem/B","code":"102694B","category":"Tree's"},{"id":159,"title":"Military Problem","url":"https://codeforces.com/contest/1006/problem/E","code":"1006E","category":"Tree's"},{"id":298,"title":"Tree Distances II","url":"https://cses.fi/problemset/task/1133","code":"CSES 1133","category":"Tree's"},{"id":160,"title":"Three Paths on a Tree","url":"https://codeforces.com/contest/1294/problem/F","code":"1294F","category":"Tree's"},{"id":161,"title":"Sloth Naptime","url":"https://codeforces.com/gym/102694/problem/C","code":"102694C","category":"LCA"},{"id":162,"title":"Cycle Free Flow","url":"https://codeforces.com/gym/102694/problem/D","code":"102694D","category":"LCA"},{"id":163,"title":"Tree Queries","url":"https://codeforces.com/contest/1328/problem/E","code":"1328E","category":"LCA"},{"id":164,"title":"1-Trees and Queries","url":"https://codeforces.com/contest/1304/problem/E","code":"1304E","category":"LCA"},{"id":165,"title":"Blood Cousins","url":"https://codeforces.com/contest/208/problem/E","code":"208E","category":"LCA"},{"id":166,"title":"Fools and Roads","url":"https://codeforces.com/contest/191/problem/C","code":"191C","category":"LCA"},{"id":167,"title":"A and B and Lecture Rooms","url":"https://codeforces.com/contest/519/problem/E","code":"519E","category":"LCA"},{"id":168,"title":"Duff-in-the-Army","url":"https://codeforces.com/contest/587/problem/C","code":"587C","category":"LCA"},{"id":169,"title":"Minimum spanning tree for each edge","url":"https://codeforces.com/contest/609/problem/E","code":"609E","category":"LCA"},{"id":170,"title":"Information Graph","url":"https://codeforces.com/contest/466/problem/E","code":"466E","category":"LCA"},{"id":171,"title":"Filthy Rich Trees","url":"https://codeforces.com/gym/102694/problem/E","code":"102694E","category":"LCA"},{"id":172,"title":"The-Lorax","url":"https://codeforces.com/gym/102694/problem/F","code":"102694F","category":"LCA"},{"id":173,"title":"Two Buttons","url":"https://codeforces.com/problemset/problem/520/B","code":"520B","category":"Graph Algorithms"},{"id":174,"title":"Party","url":"https://codeforces.com/problemset/problem/115/A","code":"115A","category":"Graph Algorithms"},{"id":175,"title":"Kefa and Park","url":"https://codeforces.com/problemset/problem/580/C","code":"580C","category":"Graph Algorithms"},{"id":176,"title":"Cyclic Components","url":"https://codeforces.com/problemset/problem/977/E","code":"977E","category":"Graph Algorithms"},{"id":177,"title":"Graph Without Long Directed Paths","url":"https://codeforces.com/contest/1144/problem/F","code":"1144F","category":"Graph Algorithms"},{"id":178,"title":"Fox And Names","url":"https://codeforces.com/contest/510/problem/C","code":"510C","category":"Graph Algorithms"},{"id":179,"title":"Dijkstra?","url":"https://codeforces.com/contest/20/problem/C","code":"20C","category":"Graph Algorithms"},{"id":180,"title":"Strongly Connected City","url":"https://codeforces.com/problemset/problem/475/B","code":"475B","category":"Graph Algorithms"},{"id":181,"title":"Fair","url":"https://codeforces.com/contest/986/problem/A","code":"986A","category":"Graph Algorithms"},{"id":182,"title":"King's Path","url":"https://codeforces.com/contest/242/problem/C","code":"242C","category":"Graph Algorithms"},{"id":183,"title":"Monopole Magnets","url":"https://codeforces.com/contest/1345/problem/D","code":"1345D","category":"Graph Algorithms"},{"id":184,"title":"Planets","url":"https://codeforces.com/contest/229/problem/B","code":"229B","category":"Graph Algorithms"},{"id":185,"title":"Directing Edges","url":"https://codeforces.com/contest/1385/problem/E","code":"1385E","category":"Graph Algorithms"},{"id":186,"title":"Greg and Graph","url":"https://codeforces.com/contest/295/problem/B","code":"295B","category":"Graph Algorithms"},{"id":187,"title":"Unstable String Sort","url":"https://codeforces.com/contest/1213/problem/F","code":"1213F","category":"Graph Algorithms"},{"id":188,"title":"Weights Distributing","url":"https://codeforces.com/contest/1343/problem/E","code":"1343E","category":"Graph Algorithms"},{"id":189,"title":"String Coloring (easy version)","url":"https://codeforces.com/contest/1296/problem/E1","code":"1296E1","category":"Graph Algorithms"},{"id":190,"title":"Book","url":"https://codeforces.com/contest/1573/problem/C","code":"1573C","category":"Graph Algorithms"},{"id":191,"title":"How Many Paths?","url":"https://codeforces.com/contest/1547/problem/G","code":"1547G","category":"Graph Algorithms"},{"id":192,"title":"Dima and Bacteria","url":"https://codeforces.com/contest/400/problem/D","code":"400D","category":"Graph Algorithms"},{"id":193,"title":"Greedy Merchants","url":"https://codeforces.com/contest/178/problem/B3","code":"178B3","category":"Graph Algorithms"},{"id":194,"title":"Plant","url":"https://codeforces.com/problemset/problem/185/A","code":"185A","category":"Matrix Exponentiation"},{"id":195,"title":"Magic Gems","url":"https://codeforces.com/contest/1117/problem/D","code":"1117D","category":"Matrix Exponentiation"},{"id":196,"title":"Once Again","url":"https://codeforces.com/contest/582/problem/B","code":"582B","category":"Matrix Exponentiation"},{"id":197,"title":"Decoding Genome","url":"https://codeforces.com/contest/222/problem/E","code":"222E","category":"Matrix Exponentiation"},{"id":198,"title":"Wet Shark and Blocks","url":"https://codeforces.com/contest/621/problem/E","code":"621E","category":"Matrix Exponentiation"},{"id":199,"title":"Product Oriented Recurrence","url":"https://codeforces.com/contest/1182/problem/E","code":"1182E","category":"Matrix Exponentiation"},{"id":200,"title":"Vasiliy's Multiset","url":"https://codeforces.com/contest/706/problem/D","code":"706D","category":"Trie"},{"id":201,"title":"Perfect Security","url":"https://codeforces.com/contest/948/problem/D","code":"948D","category":"Trie"},{"id":202,"title":"Beautiful Subarrays","url":"https://codeforces.com/contest/665/problem/E","code":"665E","category":"Trie"},{"id":203,"title":"Dr. Evil Underscores","url":"https://codeforces.com/contest/1285/problem/D","code":"1285D","category":"Trie"},{"id":204,"title":"Polycarp's phone book","url":"https://codeforces.com/contest/858/problem/D","code":"858D","category":"Trie"},{"id":205,"title":"A Lot of Games","url":"https://codeforces.com/contest/455/problem/B","code":"455B","category":"Trie"},{"id":206,"title":"Petr#","url":"https://codeforces.com/contest/113/problem/B","code":"113B","category":"Trie"},{"id":207,"title":"Sausage Maximization","url":"https://codeforces.com/contest/282/problem/E","code":"282E","category":"Trie"},{"id":208,"title":"Classy Numbers","url":"https://codeforces.com/contest/1036/problem/C","code":"1036C","category":"Dynamic Programming"},{"id":209,"title":"QAQ","url":"https://codeforces.com/problemset/problem/894/A","code":"894A","category":"Dynamic Programming"},{"id":210,"title":"Napoleon Cake","url":"https://codeforces.com/problemset/problem/1501/B","code":"1501B","category":"Dynamic Programming"},{"id":211,"title":"Red and Blue","url":"https://codeforces.com/problemset/problem/1469/B","code":"1469B","category":"Dynamic Programming"},{"id":212,"title":"Fence","url":"https://codeforces.com/problemset/problem/363/B","code":"363B","category":"Dynamic Programming"},{"id":213,"title":"Ilya and Queries","url":"https://codeforces.com/problemset/problem/313/B","code":"313B","category":"Dynamic Programming"},{"id":214,"title":"Flipping Game","url":"https://codeforces.com/problemset/problem/327/A","code":"327A","category":"Dynamic Programming"},{"id":215,"title":"Lecture Sleep","url":"https://codeforces.com/problemset/problem/961/B","code":"961B","category":"Dynamic Programming"},{"id":216,"title":"Reposts","url":"https://codeforces.com/problemset/problem/522/A","code":"522A","category":"Dynamic Programming"},{"id":217,"title":"Vitamins","url":"https://codeforces.com/problemset/problem/1042/B","code":"1042B","category":"Dynamic Programming"},{"id":218,"title":"Cut Ribbon","url":"https://codeforces.com/problemset/problem/189/A","code":"189A","category":"Dynamic Programming"},{"id":219,"title":"Pokémon Army (easy version)","url":"https://codeforces.com/problemset/problem/1420/C1","code":"1420C1","category":"Dynamic Programming"},{"id":220,"title":"Mashmokh and ACM","url":"https://codeforces.com/problemset/problem/414/B","code":"414B","category":"Dynamic Programming"},{"id":221,"title":"Basketball Exercise","url":"https://codeforces.com/problemset/problem/1195/C","code":"1195C","category":"Dynamic Programming"},{"id":222,"title":"Orac and Models","url":"https://codeforces.com/problemset/problem/1350/B","code":"1350B","category":"Dynamic Programming"},{"id":223,"title":"Mr. Kitayuta, the Treasure Hunter","url":"https://codeforces.com/contest/505/problem/C","code":"505C","category":"Dynamic Programming"},{"id":224,"title":"Modulo Sum","url":"https://codeforces.com/contest/577/problem/B","code":"577B","category":"Dynamic Programming"},{"id":225,"title":"Little Elephant and Interval","url":"https://codeforces.com/contest/204/problem/A","code":"204A","category":"Dynamic Programming"},{"id":226,"title":"Painting Fence","url":"https://codeforces.com/contest/448/problem/C","code":"448C","category":"Dynamic Programming"},{"id":227,"title":"Riding in a Lift","url":"https://codeforces.com/contest/479/problem/E","code":"479E","category":"Dynamic Programming"},{"id":228,"title":"Roman and Numbers","url":"https://codeforces.com/contest/401/problem/D","code":"401D","category":"Dynamic Programming"},{"id":229,"title":"Hanoi Factory","url":"https://codeforces.com/contest/777/problem/E","code":"777E","category":"Dynamic Programming"},{"id":230,"title":"Choosing Capital for Treeland","url":"https://codeforces.com/contest/219/problem/D","code":"219D","category":"Dynamic Programming"},{"id":231,"title":"Book of Evil","url":"https://codeforces.com/contest/337/problem/D","code":"337D","category":"Dynamic Programming"},{"id":232,"title":"Compatible Numbers","url":"https://codeforces.com/contest/165/problem/E","code":"165E","category":"Dynamic Programming"},{"id":233,"title":"The Values You Can Make","url":"https://codeforces.com/contest/687/problem/C","code":"687C","category":"Dynamic Programming"},{"id":234,"title":"Clear the String","url":"https://codeforces.com/contest/1132/problem/F","code":"1132F","category":"Dynamic Programming"},{"id":235,"title":"Antenna Coverage","url":"https://codeforces.com/contest/1253/problem/E","code":"1253E","category":"Dynamic Programming"},{"id":236,"title":"Wi-Fi","url":"https://codeforces.com/contest/1216/problem/F","code":"1216F","category":"Dynamic Programming"},{"id":237,"title":"Appleman and Tree","url":"https://codeforces.com/contest/461/problem/B","code":"461B","category":"Dynamic Programming"},{"id":238,"title":"Kalila and Dimna in the Logging Industry","url":"https://codeforces.com/contest/319/problem/C","code":"319C","category":"Dynamic Programming"},{"id":239,"title":"The Fair Nut and Rectangles","url":"https://codeforces.com/contest/1083/problem/E","code":"1083E","category":"Dynamic Programming"},{"id":240,"title":"The Maths Lecture","url":"https://codeforces.com/contest/507/problem/D","code":"507D","category":"Dynamic Programming"},{"id":241,"title":"Bad Luck Island","url":"https://codeforces.com/contest/540/problem/D","code":"540D","category":"Dynamic Programming"},{"id":242,"title":"Little Alawn's Puzzle","url":"https://codeforces.com/problemset/problem/1534/C","code":"1534C","category":"Disjoint Set"},{"id":243,"title":"Ice Skating","url":"https://codeforces.com/problemset/problem/217/A","code":"217A","category":"Disjoint Set"},{"id":244,"title":"Learning Languages","url":"https://codeforces.com/contest/277/problem/A","code":"277A","category":"Disjoint Set"},{"id":245,"title":"Bertown Subway","url":"https://codeforces.com/contest/884/problem/C","code":"884C","category":"Disjoint Set"},{"id":246,"title":"K-Complete Word","url":"https://codeforces.com/contest/1332/problem/C","code":"1332C","category":"Disjoint Set"},{"id":247,"title":"Civilization","url":"https://codeforces.com/contest/455/problem/C","code":"455C","category":"Disjoint Set"},{"id":248,"title":"0-1-Tree","url":"https://codeforces.com/contest/1156/problem/D","code":"1156D","category":"Disjoint Set"},{"id":249,"title":"Path Queries","url":"https://codeforces.com/contest/1213/problem/G","code":"1213G","category":"Disjoint Set"},{"id":250,"title":"Dogeforces","url":"https://codeforces.com/problemset/problem/1494/D","code":"1494D","category":"Disjoint Set"},{"id":251,"title":"Powerful array","url":"https://codeforces.com/contest/86/problem/D","code":"86D","category":"Sqrt Decomposition/ MO’s algo"},{"id":252,"title":"XOR and Favorite Number","url":"https://codeforces.com/contest/617/problem/E","code":"617E","category":"Sqrt Decomposition/ MO’s algo"},{"id":253,"title":"Little Elephant and Array","url":"https://codeforces.com/contest/220/problem/B","code":"220B","category":"Sqrt Decomposition/ MO’s algo"},{"id":254,"title":"Cut and Stick","url":"https://codeforces.com/contest/1514/problem/D","code":"1514D","category":"Sqrt Decomposition/ MO’s algo"},{"id":255,"title":"Tree and Queries","url":"https://codeforces.com/contest/375/problem/D","code":"375D","category":"Sqrt Decomposition/ MO’s algo"},{"id":256,"title":"XOR on Segment","url":"https://codeforces.com/contest/242/problem/E","code":"242E","category":"Sqrt Decomposition/ MO’s algo"},{"id":257,"title":"Enemy is weak","url":"https://codeforces.com/contest/61/problem/E","code":"61E","category":"Fenwick Tree"},{"id":258,"title":"Moving Points","url":"https://codeforces.com/contest/1311/problem/F","code":"1311F","category":"Fenwick Tree"},{"id":259,"title":"Cows and Sequence","url":"https://codeforces.com/contest/283/problem/A","code":"283A","category":"Fenwick Tree"},{"id":260,"title":"Pashmak and Parmida's problem","url":"https://codeforces.com/contest/459/problem/D","code":"459D","category":"Fenwick Tree"},{"id":261,"title":"Bubble Sort Graph","url":"https://codeforces.com/contest/340/problem/D","code":"340D","category":"Fenwick Tree"},{"id":262,"title":"Vasya and a Tree","url":"https://codeforces.com/contest/1076/problem/E","code":"1076E","category":"Fenwick Tree"},{"id":263,"title":"Multiset","url":"https://codeforces.com/contest/1354/problem/D","code":"1354D","category":"Fenwick Tree"},{"id":264,"title":"Fixed Point Removal","url":"https://codeforces.com/contest/1405/problem/E","code":"1405E","category":"Fenwick Tree"},{"id":265,"title":"Propagating tree","url":"https://codeforces.com/contest/383/problem/C","code":"383C","category":"Fenwick Tree"},{"id":266,"title":"Kill Anton","url":"https://codeforces.com/contest/1526/problem/D","code":"1526D","category":"Fenwick Tree"},{"id":267,"title":"Little Girl and Problem on Trees","url":"https://codeforces.com/contest/276/problem/E","code":"276E","category":"Fenwick Tree"},{"id":268,"title":"Tree and Queries","url":"https://codeforces.com/contest/375/problem/D","code":"375D","category":"Fenwick Tree"},{"id":269,"title":"Xenia and Bit Operations","url":"https://codeforces.com/contest/339/problem/D","code":"339D","category":"Segment Tree(lazy also included)"},{"id":270,"title":"Bash and a Tough Math Puzzle","url":"https://codeforces.com/contest/914/problem/D","code":"914D","category":"Segment Tree(lazy also included)"},{"id":271,"title":"Pashmak and Parmida's problem","url":"https://codeforces.com/contest/459/problem/D","code":"459D","category":"Segment Tree(lazy also included)"},{"id":272,"title":"Sereja and Brackets","url":"https://codeforces.com/contest/380/problem/C","code":"380C","category":"Segment Tree(lazy also included)"},{"id":273,"title":"Ant colony","url":"https://codeforces.com/contest/474/problem/F","code":"474F","category":"Segment Tree(lazy also included)"},{"id":274,"title":"Balanced Playlist","url":"https://codeforces.com/contest/1237/problem/D","code":"1237D","category":"Segment Tree(lazy also included)"},{"id":275,"title":"Copying Data","url":"https://codeforces.com/contest/292/problem/E","code":"292E","category":"Segment Tree(lazy also included)"},{"id":276,"title":"Interesting Array","url":"https://codeforces.com/contest/482/problem/B","code":"482B","category":"Segment Tree(lazy also included)"},{"id":277,"title":"Subarray Sorting","url":"https://codeforces.com/contest/1187/problem/D","code":"1187D","category":"Segment Tree(lazy also included)"},{"id":278,"title":"SUM and REPLACE","url":"https://codeforces.com/contest/920/problem/F","code":"920F","category":"Segment Tree(lazy also included)"},{"id":279,"title":"Playoff Tournament","url":"https://codeforces.com/contest/1535/problem/D?locale=en","code":"1535D","category":"Segment Tree(lazy also included)"},{"id":280,"title":"The Child and Sequence","url":"https://codeforces.com/contest/438/problem/D?locale=en","code":"438D","category":"Segment Tree(lazy also included)"},{"id":281,"title":"Equilibrium","url":"https://codeforces.com/contest/1556/problem/E","code":"1556E","category":"Segment Tree(lazy also included)"},{"id":282,"title":"Non-Decreasing Dilemma","url":"https://codeforces.com/contest/1567/problem/E","code":"1567E","category":"Segment Tree(lazy also included)"},{"id":283,"title":"Circular RMQ","url":"https://codeforces.com/contest/52/problem/C","code":"52C","category":"Lazy propagation"},{"id":284,"title":"Array Restoration","url":"https://codeforces.com/contest/1023/problem/D","code":"1023D","category":"Lazy propagation"},{"id":285,"title":"XOR on Segment","url":"https://codeforces.com/contest/242/problem/E","code":"242E","category":"Lazy propagation"},{"id":286,"title":"Ezzat and Grid","url":"https://codeforces.com/contest/1557/problem/D","code":"1557D","category":"Lazy propagation"},{"id":287,"title":"Lucky Queries","url":"https://codeforces.com/contest/145/problem/E","code":"145E","category":"Lazy propagation"},{"id":288,"title":"Hanoi Factory","url":"https://codeforces.com/contest/777/problem/E","code":"777E","category":"Lazy propagation"}]</script>
 <script>
 (function(){
-  var PROBLEMS = JSON.parse(document.getElementById('problem-data').textContent);
-  var STORAGE_KEY = 'cfSheetProgress_v1';
-  var state = { solved: {} };
+"use strict";
+var P=JSON.parse(document.getElementById("problem-data").textContent),KEY="cfSheetProgress_v1",TK="cfSheetTheme";
+var S={solved:{},star:{}},$=function(i){return document.getElementById(i)};
+var order=[],map={},rows={},dets={},cc={},mini={},chipEl={};
+try{var r=JSON.parse(localStorage.getItem(KEY)||"null");if(r){S.solved=r.solved||{};S.star=r.star||{}}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({solved:S.solved,star:S.star,savedAt:new Date().toISOString()}))}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function slug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}
+function src(u){return/spoj\.com/.test(u)?"SPOJ":/cses\.fi/.test(u)?"CSES":""}
+function day(t){var d=new Date(t);return d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()}
+var tm;function toast(m){var t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(tm);tm=setTimeout(function(){t.classList.remove("show")},2400)}
 
-  function load(){
-    try{
-      var raw = window.localStorage.getItem(STORAGE_KEY);
-      if(raw){
-        var parsed = JSON.parse(raw);
-        if(parsed && typeof parsed === 'object' && parsed.solved){
-          state.solved = parsed.solved;
-        }
-      }
-    }catch(e){ console.warn('Could not read saved progress', e); }
-  }
+// theme
+var th=localStorage.getItem(TK)||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+function setTheme(v){document.documentElement.dataset.theme=v;try{localStorage.setItem(TK,v)}catch(e){}}
+setTheme(th);$("theme").onclick=function(){setTheme(document.documentElement.dataset.theme==="dark"?"light":"dark")};
 
-  function save(){
-    try{
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ solved: state.solved, savedAt: new Date().toISOString() }));
-    }catch(e){ console.warn('Could not save progress', e); }
-  }
-
-  function showToast(msg){
-    var t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    clearTimeout(showToast._h);
-    showToast._h = setTimeout(function(){ t.classList.remove('show'); }, 2200);
-  }
-
-  function slugify(s){
-    return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-  }
-
-  function sourceOf(p){
-    if(/^https:\/\/(www\.)?spoj\.com/.test(p.url)) return 'SPOJ';
-    if(/^https:\/\/cses\.fi/.test(p.url)) return 'CSES';
-    return null;
-  }
-
-  // Group problems by category, preserving the order already present in PROBLEMS.
-  var categoryOrder = [];
-  var categoryMap = {};
-  PROBLEMS.forEach(function(p){
-    if(!categoryMap[p.category]){ categoryMap[p.category] = []; categoryOrder.push(p.category); }
-    categoryMap[p.category].push(p);
+// build
+P.forEach(function(p){(map[p.category]=map[p.category]||(order.push(p.category),[])).push(p)});
+var CHECK='<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var html="",chips="";
+order.forEach(function(c){
+  var id="c-"+slug(c);
+  chips+='<a href="#'+id+'" data-c="'+esc(c)+'">'+esc(c)+'</a>';
+  html+='<details class="cat" open id="'+id+'" data-c="'+esc(c)+'"><summary><i class="caret"></i><span class="cn">'+esc(c)+'</span><span class="mini"><i></i></span><span class="cc"></span></summary><ul class="rows">';
+  map[c].forEach(function(p){
+    html+='<li class="row" data-id="'+p.id+'" data-q="'+esc((p.title+" "+p.code+" "+p.category).toLowerCase())+'"><span class="ix">'+p.id+'</span><span class="cd">'+esc(p.code)+'</span><a class="tt" href="'+esc(p.url)+'" target="_blank" rel="noopener noreferrer">'+esc(p.title)+'</a><span class="src">'+src(p.url)+'</span><button class="star" aria-label="Star problem" title="Star to revisit">&#9733;</button><button class="chk" role="checkbox" aria-label="Mark solved">'+CHECK+'</button></li>';
   });
+  html+='</ul></details>';
+});
+$("cats").innerHTML=html;$("chips").innerHTML=chips;
+document.querySelectorAll(".row").forEach(function(el){rows[el.dataset.id]=el});
+document.querySelectorAll(".cat").forEach(function(el){var c=el.dataset.c;dets[c]=el;cc[c]=el.querySelector(".cc");mini[c]=el.querySelector(".mini i")});
+document.querySelectorAll(".chips a").forEach(function(el){chipEl[el.dataset.c]=el});
+$("lede").textContent=P.length+" problems across "+order.length+" topics. Solve, star and filter at your own pace.";
 
-  var categoriesEl = document.getElementById('categories');
-  var catNavEl = document.getElementById('catNav');
-  var rowsByRowEl = [];
-  var detailsByCategory = {};
-  var countEls = {};
+// stats
+var C=2*Math.PI*65;
+function streakOf(){var days={},n=0,d=new Date();Object.keys(S.solved).forEach(function(k){var v=S.solved[k];if(typeof v==="number")days[day(v)]=1});
+  if(!days[day(d)])d.setDate(d.getDate()-1);while(days[day(d)]){n++;d.setDate(d.getDate()-1)}return n}
+function stats(){
+  var n=Object.keys(S.solved).length,t=P.length,pc=t?Math.round(n/t*100):0,td=0,now=day(Date.now());
+  Object.keys(S.solved).forEach(function(k){var v=S.solved[k];if(typeof v==="number"&&day(v)===now)td++});
+  $("sSolved").textContent=n;$("sLeft").textContent=t-n;$("sToday").textContent=td;$("sStreak").textContent=streakOf();
+  $("pct").textContent=pc+"%";$("fg").style.strokeDashoffset=C*(1-n/(t||1));
+  order.forEach(function(c){var a=map[c],d=0;a.forEach(function(p){if(S.solved[p.id])d++});
+    cc[c].textContent=d+" / "+a.length;cc[c].classList.toggle("done",d===a.length);
+    var w=Math.round(d/a.length*100);mini[c].style.width=w+"%";chipEl[c].style.setProperty("--p",w+"%");chipEl[c].classList.toggle("full",d===a.length)});
+}
+function paint(id){var el=rows[id];el.classList.toggle("s",!!S.solved[id]);el.classList.toggle("st",!!S.star[id]);el.querySelector(".star").classList.toggle("on",!!S.star[id]);
+  el.querySelector(".chk").setAttribute("aria-checked",!!S.solved[id])}
+function paintAll(){P.forEach(function(p){paint(p.id)})}
 
-  function buildCategories(){
-    var navFrag = document.createDocumentFragment();
-    categoryOrder.forEach(function(catName){
-      var items = categoryMap[catName];
-      var slug = 'cat-' + slugify(catName);
+// filter
+var F="all",Q="";
+function filter(){
+  var shown=0,per={};order.forEach(function(c){per[c]=0});
+  P.forEach(function(p){var el=rows[p.id],s=!!S.solved[p.id];
+    var ok=(F==="all"||(F==="done"&&s)||(F==="todo"&&!s)||(F==="star"&&S.star[p.id]))&&(!Q||el.dataset.q.indexOf(Q)>-1);
+    el.classList.toggle("hide",!ok);if(ok){shown++;per[p.category]++}});
+  var active=F!=="all"||Q;
+  order.forEach(function(c){dets[c].classList.toggle("gone",!per[c]);if(active)dets[c].open=per[c]>0});
+  $("empty").style.display=shown?"none":"block";
+  $("count").textContent="Showing "+shown+" of "+P.length+" problems";
+}
+$("q").addEventListener("input",function(e){Q=e.target.value.trim().toLowerCase();filter()});
+document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){document.querySelectorAll(".seg button").forEach(function(x){x.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed","true");F=b.dataset.f;filter()}});
 
-      var navLink = document.createElement('a');
-      navLink.href = '#' + slug;
-      navLink.textContent = catName;
-      navLink.addEventListener('click', function(e){
-        e.preventDefault();
-        var det = detailsByCategory[catName];
-        det.open = true;
-        det.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        history.replaceState(null, '', '#' + slug);
-      });
-      navFrag.appendChild(navLink);
+// interactions (delegated)
+function flip(id){
+  var cat=P.filter(function(p){return String(p.id)===String(id)})[0].category;
+  if(S.solved[id]){delete S.solved[id]}else{S.solved[id]=Date.now();
+    var a=map[cat],d=a.every(function(p){return S.solved[p.id]});if(d)toast("Topic complete: "+cat)}
+  paint(id);save();stats();if(F==="todo"||F==="done")filter()}
+$("cats").addEventListener("click",function(e){
+  var row=e.target.closest(".row");if(!row||e.target.closest("a"))return;var id=row.dataset.id;
+  if(e.target.closest(".star")){if(S.star[id])delete S.star[id];else S.star[id]=1;paint(id);save();if(F==="star")filter();return}
+  flip(id)});
+$("chips").addEventListener("click",function(e){var a=e.target.closest("a");if(!a)return;e.preventDefault();var d=dets[a.dataset.c];d.classList.remove("gone");d.open=true;d.scrollIntoView({behavior:"smooth",block:"start"});history.replaceState(null,"",a.getAttribute("href"))});
 
-      var details = document.createElement('details');
-      details.className = 'cat-block';
-      details.id = slug;
-      details.open = true;
-      detailsByCategory[catName] = details;
+// random pick
+function pick(){
+  var c=P.filter(function(p){return!S.solved[p.id]&&!rows[p.id].classList.contains("hide")});
+  if(!c.length){toast("Nothing left to pick. Nice work!");return}
+  var p=c[Math.floor(Math.random()*c.length)],el=rows[p.id];dets[p.category].open=true;
+  el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash");toast("Try "+p.code+": "+p.title)}
+$("rnd").onclick=pick;
 
-      var summary = document.createElement('summary');
-      var titleWrap = document.createElement('div');
-      titleWrap.className = 'cat-title-wrap';
-      var caret = document.createElement('span');
-      caret.className = 'cat-caret';
-      var nameEl = document.createElement('span');
-      nameEl.className = 'cat-name';
-      nameEl.textContent = catName;
-      titleWrap.appendChild(caret);
-      titleWrap.appendChild(nameEl);
-      var countEl = document.createElement('span');
-      countEl.className = 'cat-count';
-      countEls[catName] = countEl;
-      summary.appendChild(titleWrap);
-      summary.appendChild(countEl);
-      details.appendChild(summary);
+// menu
+var menu=$("menu");$("mbtn").onclick=function(e){e.stopPropagation();menu.classList.toggle("open")};
+document.addEventListener("click",function(){menu.classList.remove("open")});
+$("exp").onclick=function(){order.forEach(function(c){dets[c].open=true})};
+$("col").onclick=function(){order.forEach(function(c){dets[c].open=false})};
+$("out").onclick=function(){var b=new Blob([JSON.stringify({solved:S.solved,star:S.star,exportedAt:new Date().toISOString(),total:P.length},null,1)],{type:"application/json"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download="cf-tracker-progress.json";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u);toast("Progress exported")};
+$("inp").onclick=function(){$("file").click()};
+$("file").onchange=function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{var j=JSON.parse(rd.result);if(!j||typeof j.solved!=="object")throw 0;S.solved=j.solved;S.star=j.star||{};save();paintAll();stats();filter();toast("Progress imported")}catch(x){toast("That file isn't a valid progress export")}};rd.readAsText(f);e.target.value=""};
+$("rst").onclick=function(){if(confirm("Clear all solved and starred problems? This can't be undone.")){S={solved:{},star:{}};save();paintAll();stats();filter();toast("Progress cleared")}};
 
-      var table = document.createElement('table');
-      var thead = document.createElement('thead');
-      thead.innerHTML = '<tr><th class="col-idx">#</th><th class="col-code">Code</th><th>Problem</th><th class="col-done">Done</th></tr>';
-      var tbody = document.createElement('tbody');
-      table.appendChild(thead);
-      table.appendChild(tbody);
-      details.appendChild(table);
+// shortcuts
+document.addEventListener("keydown",function(e){var t=e.target.tagName;
+  if(e.key==="Escape"){menu.classList.remove("open");if(t==="INPUT"){e.target.blur()}return}
+  if(t==="INPUT"||e.metaKey||e.ctrlKey||e.altKey)return;
+  if(e.key==="/"){e.preventDefault();$("q").focus()}else if(e.key==="r"||e.key==="R")pick()});
 
-      items.forEach(function(p){
-        var tr = document.createElement('tr');
-        tr.dataset.id = p.id;
-        tr.dataset.catname = p.category;
-        tr.dataset.search = (p.title + ' ' + p.code + ' ' + p.category).toLowerCase();
-
-        var tdIdx = document.createElement('td');
-        tdIdx.className = 'col-idx';
-        tdIdx.textContent = p.id;
-
-        var tdCode = document.createElement('td');
-        tdCode.className = 'col-code';
-        var codeTag = document.createElement('span');
-        codeTag.className = 'code-tag';
-        codeTag.textContent = p.code;
-        tdCode.appendChild(codeTag);
-
-        var tdTitle = document.createElement('td');
-        tdTitle.className = 'title-cell';
-        var link = document.createElement('a');
-        link.href = p.url;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        link.textContent = p.title;
-        tdTitle.appendChild(link);
-        var src = sourceOf(p);
-        if(src){
-          var srcTag = document.createElement('span');
-          srcTag.className = 'src-tag';
-          srcTag.textContent = src;
-          tdTitle.appendChild(srcTag);
-        }
-
-        var tdDone = document.createElement('td');
-        tdDone.className = 'col-done';
-        var toggle = document.createElement('span');
-        toggle.className = 'toggle';
-        toggle.setAttribute('role','checkbox');
-        toggle.setAttribute('tabindex','0');
-        toggle.innerHTML = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.2 11.7L13 4.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-        tdDone.appendChild(toggle);
-
-        tr.appendChild(tdIdx);
-        tr.appendChild(tdCode);
-        tr.appendChild(tdTitle);
-        tr.appendChild(tdDone);
-
-        function toggleSolved(){
-          var id = String(p.id);
-          if(state.solved[id]){
-            delete state.solved[id];
-          } else {
-            state.solved[id] = true;
-          }
-          applyRowState(tr, p.id);
-          save();
-          updateStats();
-        }
-
-        toggle.addEventListener('click', function(e){
-          e.stopPropagation();
-          toggleSolved();
-        });
-        toggle.addEventListener('keydown', function(e){
-          if(e.key === 'Enter' || e.key === ' '){
-            e.preventDefault();
-            e.stopPropagation();
-            toggleSolved();
-          }
-        });
-        tr.addEventListener('click', function(e){
-          if(e.target === link) return;
-          toggleSolved();
-        });
-
-        tbody.appendChild(tr);
-        rowsByRowEl.push(tr);
-      });
-
-      categoriesEl.appendChild(details);
-    });
-    catNavEl.appendChild(navFrag);
-  }
-
-  function applyRowState(tr, id){
-    var solved = !!state.solved[String(id)];
-    tr.classList.toggle('is-solved', solved);
-  }
-
-  function applyAllRowStates(){
-    rowsByRowEl.forEach(function(tr){
-      applyRowState(tr, tr.dataset.id);
-    });
-  }
-
-  function updateStats(){
-    var total = PROBLEMS.length;
-    var solvedCount = Object.keys(state.solved).length;
-    document.getElementById('statBig').innerHTML = solvedCount + '<span class="slash"> / ' + total + '</span>';
-    var pct = total ? Math.round((solvedCount/total)*100) : 0;
-    document.getElementById('statPct').textContent = pct + '% done';
-    document.getElementById('progressFill').style.width = pct + '%';
-
-    categoryOrder.forEach(function(catName){
-      var items = categoryMap[catName];
-      var done = 0;
-      items.forEach(function(p){ if(state.solved[String(p.id)]) done++; });
-      var el = countEls[catName];
-      el.textContent = done + ' / ' + items.length;
-      el.classList.toggle('cat-done', done === items.length);
-    });
-  }
-
-  var currentFilter = 'all';
-  var currentSearch = '';
-
-  function applyFilters(){
-    var visibleCount = 0;
-    var visibleByCategory = {};
-    categoryOrder.forEach(function(catName){ visibleByCategory[catName] = 0; });
-
-    rowsByRowEl.forEach(function(tr){
-      var id = tr.dataset.id;
-      var solved = !!state.solved[id];
-      var matchesFilter = currentFilter === 'all' || (currentFilter === 'solved' && solved) || (currentFilter === 'unsolved' && !solved);
-      var matchesSearch = !currentSearch || tr.dataset.search.indexOf(currentSearch) !== -1;
-      var show = matchesFilter && matchesSearch;
-      tr.classList.toggle('hidden', !show);
-      if(show){
-        visibleCount++;
-        visibleByCategory[tr.dataset.catname]++;
-      }
-    });
-
-    var searchOrFilterActive = !!currentSearch || currentFilter !== 'all';
-    categoryOrder.forEach(function(catName){
-      var det = detailsByCategory[catName];
-      var hasVisible = visibleByCategory[catName] > 0;
-      det.classList.toggle('cat-hidden', !hasVisible);
-      if(searchOrFilterActive){
-        det.open = hasVisible;
-      } else {
-        det.open = true;
-      }
-    });
-
-    document.getElementById('emptyState').style.display = visibleCount === 0 ? 'block' : 'none';
-    document.getElementById('countLine').textContent = visibleCount + ' of ' + PROBLEMS.length + ' problems shown';
-  }
-
-  document.getElementById('searchInput').addEventListener('input', function(e){
-    currentSearch = e.target.value.trim().toLowerCase();
-    applyFilters();
-  });
-
-  var chips = document.querySelectorAll('.chip');
-  chips.forEach(function(chip){
-    chip.addEventListener('click', function(){
-      chips.forEach(function(c){ c.setAttribute('aria-pressed','false'); });
-      chip.setAttribute('aria-pressed','true');
-      currentFilter = chip.dataset.filter;
-      applyFilters();
-    });
-  });
-
-  document.getElementById('expandAllBtn').addEventListener('click', function(){
-    categoryOrder.forEach(function(catName){ detailsByCategory[catName].open = true; });
-  });
-  document.getElementById('collapseAllBtn').addEventListener('click', function(){
-    categoryOrder.forEach(function(catName){ detailsByCategory[catName].open = false; });
-  });
-
-  document.getElementById('exportBtn').addEventListener('click', function(){
-    var payload = { solved: state.solved, exportedAt: new Date().toISOString(), total: PROBLEMS.length };
-    var blob = new Blob([JSON.stringify(payload, null, 1)], { type: 'application/json' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'cf-sheet-progress.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    showToast('Progress exported');
-  });
-
-  document.getElementById('importBtn').addEventListener('click', function(){
-    document.getElementById('importFile').click();
-  });
-
-  document.getElementById('importFile').addEventListener('change', function(e){
-    var file = e.target.files[0];
-    if(!file) return;
-    var reader = new FileReader();
-    reader.onload = function(){
-      try{
-        var parsed = JSON.parse(reader.result);
-        if(parsed && typeof parsed.solved === 'object'){
-          state.solved = parsed.solved;
-          save();
-          applyAllRowStates();
-          updateStats();
-          applyFilters();
-          showToast('Progress imported');
-        } else {
-          showToast('That file did not look right');
-        }
-      }catch(err){
-        showToast('Could not read that file');
-      }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
-  });
-
-  document.getElementById('resetBtn').addEventListener('click', function(){
-    if(window.confirm('Clear all checked-off problems? This cannot be undone.')){
-      state.solved = {};
-      save();
-      applyAllRowStates();
-      updateStats();
-      applyFilters();
-      showToast('Progress cleared');
-    }
-  });
-
-  load();
-  buildCategories();
-  applyAllRowStates();
-  updateStats();
-  applyFilters();
+paintAll();stats();filter();
 })();
 </script>
 </body>
